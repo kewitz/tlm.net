@@ -1,3 +1,6 @@
 .svn/
 **/obj/
 **/bin
+**/bin32
+**/bin64
+**/packages
