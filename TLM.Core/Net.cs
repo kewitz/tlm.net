@@ -9,18 +9,33 @@ namespace TLM.Core
     [Serializable]
     public class Net
     {
-        public double dL, Ylt, Er, c, f0, x, y, Z0, sigma;
+        public double dL, Ylt, Er, c, f0, x, y, Z0, sigma, lambda0, tal0, tc, dT, Vlt, Zlt;
         public int N;
         public Boundaries Boundaries;
         public List<Node> Nodes;
 
         public Net() { }
-        public Net(double sizeX, double sizeY, double sigma, double dL, double Ylt, double Er, int N, Boundaries bounds)
+        public Net(double sizeX, double sizeY, double sigma, double dL, double Z0, double Er, double f0, double c, int N, Boundaries bounds)
         {
             Nodes = new List<Node>();
+            double sqrt2 = Math.Sqrt(2.0);
+            
             this.dL = dL;
-            this.Ylt = Ylt;
             this.Er = Er;
+            this.c = c;
+            this.f0 = f0;
+            this.dL = dL;
+            this.N = N;
+            this.Z0 = Z0;
+            this.Er = Er;
+            this.sigma = sigma;
+            this.lambda0 = this.c / this.f0;
+            this.tal0 = this.lambda0 / this.c;
+            this.tc = (5 * this.tal0) / 2;
+            this.dT = this.dL / (sqrt2 * this.c);
+            this.Vlt = sqrt2 * this.c;
+            this.Zlt = sqrt2 * this.Z0;
+            this.Ylt = 1 / this.Zlt;
             this.Boundaries = bounds;
             List<double> vecX = Calc.doubles(0, sizeX, dL);
             List<double> vecY = Calc.doubles(0, sizeY, dL);
@@ -46,7 +61,7 @@ namespace TLM.Core
 
         public void Transmit(Node node, int k)
         {
-            
+
         }
 
     }
@@ -97,12 +112,6 @@ namespace TLM.Core
         self.Ylt = 1/self.Zlt
         print "Simulation parameters defined..."
 
-    def createNet(self):
-        """
-        Create matrix based on x columns, y lines and spaced by dL meters.
-        """
-        self.net = Net(self.x,self.y,self.sigma,self.dL,self.Ylt,self.Er,self.N)
-        print "Net created..."
 
     def run(self):
         print "Starting simulation..."
