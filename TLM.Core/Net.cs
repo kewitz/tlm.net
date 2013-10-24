@@ -12,16 +12,19 @@ namespace TLM.Core
     {
         public double dL, Ylt, Er, c, f0, x, y, Z0, sigma, lambda0, tal0, tc, dT, Vlt, Zlt;
         public int N;
+        public int[] shape;
         public List<Node> Nodes;
         public ILNumerics.ILMath ilAlg;
         public Boundaries boundaries;
-        
+
         public Net() { }
         public Net(double sizeX, double sizeY, double sigma, double dL, double Z0, double Er, double f0, double c, int N, Boundaries bounds)
         {
-            Nodes = new List<Node>();
+            ILRetArray<double> vecX = ILNumerics.ILMath.vec<double>(0, dL, sizeX);
+            ILRetArray<double> vecY = ILNumerics.ILMath.vec<double>(0, dL, sizeY);
             double sqrt2 = Math.Sqrt(2.0);
-            
+
+            this.shape = new int[2] { vecX.Count(), vecY.Count() };
             this.dL = dL;
             this.Er = Er;
             this.c = c;
@@ -39,8 +42,8 @@ namespace TLM.Core
             this.Zlt = sqrt2 * this.Z0;
             this.Ylt = 1 / this.Zlt;
             this.boundaries = bounds;
-            ILRetArray<double> vecX = ILNumerics.ILMath.vec<double>(0, dL, sizeX);
-            ILRetArray<double> vecY = ILNumerics.ILMath.vec<double>(0, dL, sizeY);
+
+            Nodes = new List<Node>();
             foreach (var x in vecX)
             {
                 int j = vecX.ToList().IndexOf(x);
@@ -48,7 +51,6 @@ namespace TLM.Core
                 {
                     int i = vecY.ToList().IndexOf(y);
                     Node newNode = new Node(i, j, this.sigma, this.dL, this.Ylt, this.Er, this.N);
-
                 }
             }
         }
@@ -63,42 +65,17 @@ namespace TLM.Core
 
         public void Transmit(Node node, int k)
         {
-
+            node.Vi.P1[k] = node.j < shape[1] ? GetNode(node.i, node.j + 1).Vr.P3[k - 1] : this.boundaries.Bottom * node.Vr.P1[k - 1];
+            node.Vi.P2[k] = node.i > 0 ? GetNode(node.i - 1, node.j).Vr.P4[k - 1] : this.boundaries.Left * node.Vr.P2[k - 1];
+            node.Vi.P3[k] = node.j > 0 ? GetNode(node.i, node.j - 1).Vr.P1[k - 1] : this.boundaries.Top * node.Vr.P3[k - 1];
+            node.Vi.P4[k] = node.i < shape[0] ? GetNode(node.i+1, node.j).Vr.P2[k - 1] : this.boundaries.Right * node.Vr.P4[k - 1];
+            node.Vi.P5[k] = node.Vr.P5[k - 1];
         }
 
     }
 }
 
 /*
-def __init__(self, sizeX, sizeY, sigma, dL, Ylt, Er, N, boundaries={'top':1, 'bottom':1, 'left':-0.17157, 'right':-0.17157}):
-        vecX = np.arange(0,sizeX,dL)
-        vecY = np.arange(0,sizeY,dL)
-        self.dL = dL
-        self.Ylt = Ylt
-        self.Er = Er
-        self.nodes = []
-        self.boundaries = boundaries
-        self.x, self.y = np.meshgrid(vecX,vecY)
-        for x in vecX:
-            j = vecX.tolist().index(x)
-            for y in vecY:
-                i = vecY.tolist().index(y)
-                newNode = Node(x,y,i,j, sigma, dL, Ylt, Er, N)
-                self.nodes.append(newNode)
-
-    def getNode(self,**param):
-        """
-        Parameters
-        ----------
-        mpos:
-            Get node based on it's position in the ``matrix[i,j]``.
-        >>> Net.getNode(mpos=[i,j])
-        """
-        if param.has_key('mpos'):
-            i, j = (param['mpos'][0], param['mpos'][1])
-            ns = filter(lambda n: n.i == i and n.j == j, self.nodes)
-            return ns[0] if len(ns)==1 else Exception('Node not found in position i={} and j={}'.format(i,j))
-
     def setVi(self,node,k):
         """
         Return the incident voltages for a `node` in the `k` iteration for each
