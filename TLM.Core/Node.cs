@@ -16,7 +16,7 @@ namespace TLM.Core
         public Ports Vi, Vr;
 
         public Node() { }
-        public Node(int i, int j, double sigma, double Er, double dL, double Ylt, int N)
+        public Node(int i, int j, double sigma, double dL, double Ylt, double Er, int N)
         {
             this.i = i;
             this.j = j;
