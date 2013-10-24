@@ -76,50 +76,6 @@ namespace TLM.Core
 }
 
 /*
-    def setVi(self,node,k):
-        """
-        Return the incident voltages for a `node` in the `k` iteration for each
-        port. Boundary conditions are considered.
-
-            :math:`_kV_1^i(i,j) = _{k-1}V_3^r(i,j+1)`
-        """
-        maxi, maxj = max(map(lambda x: (x.i ,x.j), self.nodes))
-        node.Vi[1][k] = self.getNode(mpos=[node.i,node.j+1]).Vr[3][k-1] if node.j < maxj else self.boundaries["bottom"]*node.Vr[1][k-1]
-        node.Vi[2][k] = self.getNode(mpos=[node.i-1,node.j]).Vr[4][k-1] if node.i > 0 else self.boundaries["left"]*node.Vr[2][k-1]
-        node.Vi[3][k] = self.getNode(mpos=[node.i,node.j-1]).Vr[1][k-1] if node.j > 0 else self.boundaries["top"]*node.Vr[3][k-1]
-        node.Vi[4][k] = self.getNode(mpos=[node.i+1,node.j]).Vr[2][k-1] if node.i < maxi else self.boundaries["right"]*node.Vr[4][k-1]
-        node.Vi[5][k] = node.Vr[5][k-1]
-        #Vis = dict(zip([1,2,3,4,5],[V1,V2,V3,V4,V5]))
-
- * def __init__(self,c,f0,dL,x,y,N,Z0,Er,sigma):
-        self.c = c
-        self.f0 = f0
-        self.dL = dL
-        self.x = x
-        self.y = y
-        self.N = N
-        self.Z0 = Z0
-        self.Er = Er
-        self.sigma = sigma
-        self.Fk = None
-        self.ExctNodes = []
-        print "Simulation created..."
-        self.calcParams()
-        
-    def calcParams(self):
-        """
-        Determinate parameters values for simulation.
-        """
-        self.lambda0 = self.c/self.f0
-        self.tal0 = self.lambda0/self.c
-        self.tc = (5*self.tal0)/2
-        self.dT = self.dL/(np.sqrt(2)*self.c)
-        self.Vlt = np.sqrt(2)*self.c
-        self.Zlt = np.sqrt(2)*self.Z0
-        self.Ylt = 1/self.Zlt
-        print "Simulation parameters defined..."
-
-
     def run(self):
         print "Starting simulation..."
         for k in range(self.N):

@@ -69,51 +69,19 @@ namespace TLM.Core
             this.Vr.P4[k] = vr.ElementAt(3);
             this.Vr.P5[k] = vr.ElementAt(4);
         }
-
-        
-
+       
+        public double GetEz(int k)
+        {
+            double Ez = (2*((((this.Vi.P1[k]) +
+                        (this.Vi.P2[k]) +
+                        (this.Vi.P3[k]) +
+                        (this.Vi.P4[k])) *
+                        this.Ylt) +
+                        (this.Vi.P4[k]) *
+                        this.Ys))/((this.dL) *
+                        ((4*this.Ylt) +
+                        this.Ys + this.Gs));
+            return Ez;
+        }
     }
 }
-
-/*
- def setEz(self, k, Ez):
-        """
-        Parameters
-        ----------
-        k: int
-            Iteration number
-        Ez: double
-            Electrical field at z axis
-        Result
-        ------
-        Function translate the electrical field into voltages (Vi) for the
-        system
-        """
-        Vz = Ez*self.netParams["dL"]
-        Vi = ((4*Vz * self.netParams["Ylt"]) +
-                (self.Vi[5][k] * self.Ys)/(2*((4 * self.netParams["Ylt"]) +
-                self.Ys + self.Gs)))
-        for n in [1,2,3,4]:
-            self.Vi[n][k] = Vi
-
-    def getEz(self, k):
-        """
-        Parameters
-        ----------
-        k: int
-            Iteration number
-        Result
-        ------
-        Return the Ez at k iteration
-        """
-        Ez = (2*((((self.Vi[1][k]) +
-                        (self.Vi[2][k]) +
-                        (self.Vi[3][k]) +
-                        (self.Vi[4][k])) *
-                        self.netParams["Ylt"]) +
-                        (self.Vi[5][k]) *
-                        self.Ys))/((self.netParams["dL"]) *
-                        ((4*self.netParams["Ylt"]) +
-                        self.Ys + self.Gs))
-        return Ez
-*/
