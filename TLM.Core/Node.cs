@@ -13,10 +13,11 @@ namespace TLM.Core
     {
         public double x, y, sigma, Er, dL, Ylt, Gs, Ys, Y;
         public int i, j;
+        public bool input;
         public Ports Vi, Vr;
 
         public Node() { }
-        public Node(int i, int j, double sigma, double dL, double Ylt, double Er, int N)
+        public Node(int i, int j, double sigma, double dL, double Ylt, double Er, int N, bool input = false)
         {
             this.i = i;
             this.j = j;
@@ -31,6 +32,7 @@ namespace TLM.Core
             this.Y = 4 + Ys + Gs;
             this.Vi = new Ports(N);
             this.Vr = new Ports(N);
+            this.input = input;
         }
 
         public void SetEz(int k, double Ez)
@@ -61,8 +63,7 @@ namespace TLM.Core
                         this.Vi.P5[k],
                     }, 5);
             //Solved reflected voltage array.
-            ILArray<double> vr = (1 / this.Y) * s * vi;
-
+            ILArray<double> vr = (1 / this.Y) * ILMath.multiply(s,vi);
             this.Vr.P1[k] = vr.ElementAt(0);
             this.Vr.P2[k] = vr.ElementAt(1);
             this.Vr.P3[k] = vr.ElementAt(2);

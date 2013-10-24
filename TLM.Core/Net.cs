@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ILNumerics;
+using NCalc;
 
 namespace TLM.Core
 {
@@ -14,8 +15,8 @@ namespace TLM.Core
         public int N;
         public int[] shape;
         public List<Node> Nodes;
-        public ILNumerics.ILMath ilAlg;
         public Boundaries boundaries;
+        public string Fk;
 
         public Net() { }
         public Net(double sizeX, double sizeY, double sigma, double dL, double Z0, double Er, double f0, double c, int N, Boundaries bounds)
@@ -24,7 +25,7 @@ namespace TLM.Core
             ILRetArray<double> vecY = ILNumerics.ILMath.vec<double>(0, dL, sizeY);
             double sqrt2 = Math.Sqrt(2.0);
 
-            this.shape = new int[2] { vecX.Count(), vecY.Count() };
+            this.shape = new int[2] { vecX.Count() - 1, vecY.Count() - 1 };
             this.dL = dL;
             this.Er = Er;
             this.c = c;
@@ -51,6 +52,7 @@ namespace TLM.Core
                 {
                     int i = vecY.ToList().IndexOf(y);
                     Node newNode = new Node(i, j, this.sigma, this.dL, this.Ylt, this.Er, this.N);
+                    Nodes.Add(newNode);
                 }
             }
         }
@@ -65,27 +67,42 @@ namespace TLM.Core
 
         public void Transmit(Node node, int k)
         {
-            node.Vi.P1[k] = node.j < shape[1] ? GetNode(node.i, node.j + 1).Vr.P3[k - 1] : this.boundaries.Bottom * node.Vr.P1[k - 1];
+            node.Vi.P1[k] = node.j < shape[0] ? GetNode(node.i, node.j + 1).Vr.P3[k - 1] : this.boundaries.Bottom * node.Vr.P1[k - 1];
             node.Vi.P2[k] = node.i > 0 ? GetNode(node.i - 1, node.j).Vr.P4[k - 1] : this.boundaries.Left * node.Vr.P2[k - 1];
             node.Vi.P3[k] = node.j > 0 ? GetNode(node.i, node.j - 1).Vr.P1[k - 1] : this.boundaries.Top * node.Vr.P3[k - 1];
-            node.Vi.P4[k] = node.i < shape[0] ? GetNode(node.i+1, node.j).Vr.P2[k - 1] : this.boundaries.Right * node.Vr.P4[k - 1];
+            node.Vi.P4[k] = node.i < shape[1] ? GetNode(node.i + 1, node.j).Vr.P2[k - 1] : this.boundaries.Right * node.Vr.P4[k - 1];
             node.Vi.P5[k] = node.Vr.P5[k - 1];
+        }
+
+        public void Run()
+        {
+            for (int k = 0; k < this.N -1; k++)
+            {
+                //Excitação
+                Expression exc = new Expression(Fk);
+                exc.Parameters["k"] = k;
+                exc.Parameters["dT"] = dT;
+                exc.Parameters["f0"] = f0;
+                exc.Parameters["Pi"] = Math.PI;
+                var inputNodes = (from node in Nodes
+                                  where node.input == true
+                                  select node).ToList();
+                foreach (Node node in inputNodes)
+                {
+                    var value = (double)exc.Evaluate();
+                    node.SetEz(k, value);
+                }
+                //Solve Scatter
+                var needSolve = (from node in Nodes
+                                 where node.Vi.NeedToSolve(k)
+                                 select node).ToList();
+                foreach (Node node in needSolve)
+                    node.SolveScatter(k);
+                //Transmit
+                foreach (Node node in Nodes)
+                    Transmit(node, k + 1);
+            }
         }
 
     }
 }
-
-/*
-    def run(self):
-        print "Starting simulation..."
-        for k in range(self.N):
-            #Excitação
-            for node in self.ExctNodes:
-                self.Fk(k=k,node=node)
-            #Logica em nivel de iteração.
-            for node in filter(lambda n: n.needSolve(k) ,self.net.nodes):
-                node.solveScatter(k)
-            for node in self.net.nodes:
-                self.net.setVi(node,k+1)
-            print "%s/%s iteration done." % (k, self.N)
-*/

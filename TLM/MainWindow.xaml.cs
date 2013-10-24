@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using TLM.Core;
+
 namespace TLM
 {
     /// <summary>
@@ -20,6 +22,8 @@ namespace TLM
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Net net;
+
         public MainWindow()
         {
             InitializeComponent();

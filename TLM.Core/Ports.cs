@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ILNumerics;
+
 namespace TLM.Core
 {
     [Serializable]
@@ -13,16 +15,16 @@ namespace TLM.Core
 
         public Ports(int size)
         {
-            P1 = new List<double>(size);
-            P2 = new List<double>(size);
-            P3 = new List<double>(size);
-            P4 = new List<double>(size);
-            P5 = new List<double>(size);
+            P1 = ILMath.zeros<double>(size).ToList();
+            P2 = ILMath.zeros<double>(size).ToList();
+            P3 = ILMath.zeros<double>(size).ToList();
+            P4 = ILMath.zeros<double>(size).ToList();
+            P5 = ILMath.zeros<double>(size).ToList();
         }
 
         public bool NeedToSolve(int k)
         {
-            return this.P1[k] != 0 && this.P2[k] != 0 && this.P3[k] != 0 && this.P4[k] != 0 && this.P5[k] != 0;
+            return this.P1[k] != 0 && this.P2[k] != 0 && this.P3[k] != 0 && this.P4[k] != 0;
         }
     }
 }
