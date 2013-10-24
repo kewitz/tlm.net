@@ -11,40 +11,48 @@ namespace TLM.Core
     {
         public double dL, Ylt, Er, c, f0, x, y, Z0, sigma;
         public int N;
+        public Boundaries Boundaries;
         public List<Node> Nodes;
+
+        public Net() { }
+        public Net(double sizeX, double sizeY, double sigma, double dL, double Ylt, double Er, int N, Boundaries bounds)
+        {
+            Nodes = new List<Node>();
+            this.dL = dL;
+            this.Ylt = Ylt;
+            this.Er = Er;
+            this.Boundaries = bounds;
+            List<double> vecX = Calc.doubles(0, sizeX, dL);
+            List<double> vecY = Calc.doubles(0, sizeY, dL);
+            foreach (var x in vecX)
+            {
+                int j = vecX.IndexOf(x);
+                foreach (var y in vecY)
+                {
+                    int i = vecY.IndexOf(y);
+                    Node newNode = new Node(i, j, this.sigma, this.Er, this.dL, this.Ylt, this.N);
+                    Nodes.Add(newNode);
+                }
+            }
+        }
+
+        public Node GetNode(int i, int j)
+        {
+            Node n = (from node in this.Nodes
+                      where node.i == i && node.j == j
+                      select node).FirstOrDefault();
+            return n;
+        }
+
+        public void Transmit(Node node, int k)
+        {
+            
+        }
 
     }
 }
 
 /*
-def __init__(self, sizeX, sizeY, sigma, dL, Ylt, Er, N, boundaries={'top':1, 'bottom':1, 'left':-0.17157, 'right':-0.17157}):
-        vecX = np.arange(0,sizeX,dL)
-        vecY = np.arange(0,sizeY,dL)
-        self.dL = dL
-        self.Ylt = Ylt
-        self.Er = Er
-        self.nodes = []
-        self.boundaries = boundaries
-        self.x, self.y = np.meshgrid(vecX,vecY)
-        for x in vecX:
-            j = vecX.tolist().index(x)
-            for y in vecY:
-                i = vecY.tolist().index(y)
-                newNode = Node(x,y,i,j, sigma, dL, Ylt, Er, N)
-                self.nodes.append(newNode)
-
-    def getNode(self,**param):
-        """
-        Parameters
-        ----------
-        mpos:
-            Get node based on it's position in the ``matrix[i,j]``.
-        >>> Net.getNode(mpos=[i,j])
-        """
-        if param.has_key('mpos'):
-            i, j = (param['mpos'][0], param['mpos'][1])
-            ns = filter(lambda n: n.i == i and n.j == j, self.nodes)
-            return ns[0] if len(ns)==1 else Exception('Node not found in position i={} and j={}'.format(i,j))
 
     def setVi(self,node,k):
         """

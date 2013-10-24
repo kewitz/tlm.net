@@ -30,7 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ILNumerics">
+    <Reference Include="ILNumerics, Version=3.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ILNumerics.3.2.2.0\lib\ILNumerics.dll</HintPath>
     </Reference>
     <Reference Include="NCalc">
@@ -46,8 +47,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calc.cs" />
+    <Compile Include="Boundaries.cs" />
     <Compile Include="Net.cs" />
     <Compile Include="Node.cs" />
+    <Compile Include="Ports.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
