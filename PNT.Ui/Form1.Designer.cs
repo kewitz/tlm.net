@@ -28,7 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.TBInputFunc = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.BTRun = new System.Windows.Forms.Button();
             this.BTCreateNet = new System.Windows.Forms.Button();
@@ -55,11 +57,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.TBSizeX = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.ilPanel = new ILNumerics.Drawing.ILPanel();
             this.StatusBar = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.TBInputFunc = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -67,6 +70,8 @@
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.splitContainer1.IsSplitterFixed = true;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
             // 
@@ -99,9 +104,21 @@
             this.splitContainer1.Panel1.Controls.Add(this.label2);
             this.splitContainer1.Panel1.Controls.Add(this.TBSizeX);
             this.splitContainer1.Panel1.Controls.Add(this.label1);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.ilPanel);
             this.splitContainer1.Size = new System.Drawing.Size(832, 419);
             this.splitContainer1.SplitterDistance = 245;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // TBInputFunc
+            // 
+            this.TBInputFunc.Location = new System.Drawing.Point(13, 332);
+            this.TBInputFunc.Name = "TBInputFunc";
+            this.TBInputFunc.Size = new System.Drawing.Size(207, 20);
+            this.TBInputFunc.TabIndex = 26;
+            this.TBInputFunc.Text = "Sin(2*[Pi]*[f0]*([k]+1)*[dT])";
             // 
             // label11
             // 
@@ -326,12 +343,26 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Size X";
             // 
+            // ilPanel
+            // 
+            this.ilPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ilPanel.Driver = ILNumerics.Drawing.RendererTypes.GDI;
+            this.ilPanel.Editor = null;
+            this.ilPanel.Location = new System.Drawing.Point(0, 0);
+            this.ilPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ilPanel.Name = "ilPanel";
+            this.ilPanel.Rectangle = ((System.Drawing.RectangleF)(resources.GetObject("ilPanel.Rectangle")));
+            this.ilPanel.ShowUIControls = false;
+            this.ilPanel.Size = new System.Drawing.Size(583, 419);
+            this.ilPanel.TabIndex = 1;
+            // 
             // StatusBar
             // 
             this.StatusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.StatusLabel});
             this.StatusBar.Location = new System.Drawing.Point(0, 397);
             this.StatusBar.Name = "StatusBar";
+            this.StatusBar.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.StatusBar.Size = new System.Drawing.Size(832, 22);
             this.StatusBar.TabIndex = 1;
             this.StatusBar.Text = "statusStrip1";
@@ -339,15 +370,8 @@
             // StatusLabel
             // 
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(0, 17);
-            // 
-            // TBInputFunc
-            // 
-            this.TBInputFunc.Location = new System.Drawing.Point(13, 332);
-            this.TBInputFunc.Name = "TBInputFunc";
-            this.TBInputFunc.Size = new System.Drawing.Size(207, 20);
-            this.TBInputFunc.TabIndex = 26;
-            this.TBInputFunc.Text = "Sin(2*[Pi]*[f0]*([k]+1)*[dT])";
+            this.StatusLabel.Size = new System.Drawing.Size(67, 17);
+            this.StatusLabel.Text = "StatusLabel";
             // 
             // Form1
             // 
@@ -360,6 +384,7 @@
             this.Text = "Form1";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
+            this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.StatusBar.ResumeLayout(false);
@@ -401,6 +426,7 @@
         private System.Windows.Forms.ToolStripStatusLabel StatusLabel;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox TBInputFunc;
+        private ILNumerics.Drawing.ILPanel ilPanel;
     }
 }
 

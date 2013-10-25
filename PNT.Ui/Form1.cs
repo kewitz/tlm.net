@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 
+using ILNumerics;
+using ILNumerics.Drawing;
+using ILNumerics.Drawing.Plotting;
 using TLM.Core;
 
 namespace TLM.Ui
@@ -21,6 +24,22 @@ namespace TLM.Ui
         public Form1()
         {
             InitializeComponent();
+            
+            // have some data
+            ILArray<float> A = new float[] { 5, 6, 7, 3, 5, 1, 7, 9 };
+            // create new scene, add plot cube
+            var scene = new ILScene {
+                new ILPlotCube {
+                    // add line plot, provide data as rows
+                    new ILLinePlot(A.T, lineColor: Color.Blue)
+                }
+            };
+            ilPanel.Scene.Add(scene);
+        }
+
+        private void netStatus(object sender, string e)
+        {
+            StatusLabel.Text = e;
         }
 
         private void BTCreateNet_Click(object sender, EventArgs e)
@@ -39,20 +58,21 @@ namespace TLM.Ui
             double bBot = Convert.ToDouble(TBBoundBot.Text, System.Globalization.CultureInfo.InvariantCulture);
             double bRight = Convert.ToDouble(TBBoundRight.Text, System.Globalization.CultureInfo.InvariantCulture);
             this.net = new Net(sizeX, sizeY, sigma, dL, z0, Er, f0, C, N, new Boundaries(bTop, bBot, bLeft, bRight));
+
         }
 
         private void BTRun_Click(object sender, EventArgs e)
         {
             net.Fk = TBInputFunc.Text;
             genious = new Thread(new ThreadStart(net.Run));
-            net.Progress += netProgess;
+            net.Progress += netStatus;
             genious.Start();
             genious.Join();
         }
 
-        private void netProgess(object sender, int e)
+        private void netStatus(object sender, int e)
         {
-            StatusLabel.Text = string.Format("Iteration {0}.",e);
+            StatusLabel.Text = string.Format("Iteration {0}", e);
         }
 
 

@@ -11,6 +11,10 @@ namespace TLM.Core
     [Serializable]
     public class Net
     {
+        public event EventHandler<int> Progress;
+        public event EventHandler<string> StatusUpdate;
+        public event EventHandler CalcDone;
+
         public double dL, Ylt, Er, c, f0, x, y, Z0, sigma, lambda0, tal0, tc, dT, Vlt, Zlt;
         public int N;
         public int[] shape;
@@ -74,9 +78,6 @@ namespace TLM.Core
             node.Vi.P5[k] = node.Vr.P5[k - 1];
         }
 
-        public event EventHandler<int> Progress;
-        public event EventHandler CalcDone;
-
         public void Run()
         {
             for (int k = 0; k < this.N -1; k++)
@@ -90,21 +91,18 @@ namespace TLM.Core
                 var inputNodes = (from node in Nodes
                                   where node.input == true
                                   select node).ToList();
-                foreach (Node node in inputNodes)
-                {
-                    var value = (double)exc.Evaluate();
-                    node.SetEz(k, value);
-                }
+
+                var value = (double)exc.Evaluate();
+                Parallel.ForEach(inputNodes, n => n.SetEz(k, value));
+
                 //Solve Scatter
                 var needSolve = (from node in Nodes
                                  where node.Vi.NeedToSolve(k)
                                  select node).ToList();
-                foreach (Node node in needSolve)
-                    node.SolveScatter(k);
+                Parallel.ForEach(needSolve, n => n.SolveScatter(k));
                 //Transmit
-                foreach (Node node in Nodes)
-                    Transmit(node, k + 1);
-
+                Parallel.ForEach(Nodes, n => Transmit(n, k + 1));
+                
                 Progress.Invoke(this, k);
 #if DEBUG
                 Console.Write(String.Format("\rSolving {0} iteration...",k));
