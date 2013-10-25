@@ -74,6 +74,9 @@ namespace TLM.Core
             node.Vi.P5[k] = node.Vr.P5[k - 1];
         }
 
+        public event EventHandler<int> Progress;
+        public event EventHandler CalcDone;
+
         public void Run()
         {
             for (int k = 0; k < this.N -1; k++)
@@ -101,8 +104,14 @@ namespace TLM.Core
                 //Transmit
                 foreach (Node node in Nodes)
                     Transmit(node, k + 1);
+
+                Progress.Invoke(this, k);
+#if DEBUG
+                Console.Write(String.Format("\rSolving {0} iteration...",k));
+#endif
             }
         }
+
 
     }
 }

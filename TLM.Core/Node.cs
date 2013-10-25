@@ -63,24 +63,24 @@ namespace TLM.Core
                         this.Vi.P5[k],
                     }, 5);
             //Solved reflected voltage array.
-            ILArray<double> vr = (1 / this.Y) * ILMath.multiply(s,vi);
+            ILArray<double> vr = (1 / this.Y) * ILMath.multiply(s, vi);
             this.Vr.P1[k] = vr.ElementAt(0);
             this.Vr.P2[k] = vr.ElementAt(1);
             this.Vr.P3[k] = vr.ElementAt(2);
             this.Vr.P4[k] = vr.ElementAt(3);
             this.Vr.P5[k] = vr.ElementAt(4);
         }
-       
+
         public double GetEz(int k)
         {
-            double Ez = (2*((((this.Vi.P1[k]) +
+            double Ez = (2 * ((((this.Vi.P1[k]) +
                         (this.Vi.P2[k]) +
                         (this.Vi.P3[k]) +
                         (this.Vi.P4[k])) *
                         this.Ylt) +
                         (this.Vi.P4[k]) *
-                        this.Ys))/((this.dL) *
-                        ((4*this.Ylt) +
+                        this.Ys)) / ((this.dL) *
+                        ((4 * this.Ylt) +
                         this.Ys + this.Gs));
             return Ez;
         }
