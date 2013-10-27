@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLM.Core", "TLM.Core\TLM.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev", "Debug\Dev.csproj", "{48BD120B-D04A-4AD9-B7E5-E22F417F2F82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PNT.Ui", "PNT.Ui\PNT.Ui.csproj", "{C5723E53-CC21-4916-9A2C-C831E107C265}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLM.Ui", "TLM.Ui\TLM.Ui.csproj", "{C5723E53-CC21-4916-9A2C-C831E107C265}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
