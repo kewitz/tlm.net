@@ -47,11 +47,16 @@
                         <Button x:Name="BTCreateNet" Click="BTCreateNet_Click" Content="Create Net"/>
                     </StackPanel>
                     <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="200"/>
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
-                        <local:NetDesigner x:Name="Designer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"/>
+                        <DataGrid x:Name="DGMatList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" CanUserResizeRows="False" EnableRowVirtualization="False"/>
+                        <local:NetDesigner x:Name="Designer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="2"/>
                     </Grid>
                 </Grid>
             </TabItem>

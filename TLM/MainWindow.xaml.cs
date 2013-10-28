@@ -31,10 +31,18 @@ namespace TLM
 
         public MainWindow()
         {
+
             InitializeComponent();
-            
             var signal = ILMath.ones<float>(10, 10);
-            
+
+            defaultMaterials = new List<Material>() {
+                new Material("Air", 1, 5E-15)
+            };
+            CBMat.ItemsSource = defaultMaterials.Where(mat => mat.Name != "");
+
+            DGMatList.ItemsSource = defaultMaterials;
+            DGMatList.RowEditEnding += DGMatList_RowEditEnding;
+
             var scene = new ILScene {
                 new ILPlotCube(twoDMode: false) {
                     //new ILPoints {
@@ -51,6 +59,16 @@ namespace TLM
             };
             scene.First<ILPlotCube>().Rotation = Matrix4.Rotation(new Vector3(1f, 0.23f, 1), 0.7f);
             ilPanel.Scene.Add(scene);
+        }
+
+        void DGMatList_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+            CBMat.ItemsSource = defaultMaterials.Where(mat => mat.Name != "");
+        }
+
+        void DGMatList_ManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
+        {
+            CBMat.ItemsSource = defaultMaterials.Where(mat => mat.Name != "");
         }
 
         public void CreateNet()

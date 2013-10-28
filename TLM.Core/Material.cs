@@ -9,8 +9,9 @@ namespace TLM.Core
     [Serializable]
     public class Material
     {
-        public string Name;
-        public double Er, Sigma;
+        public string Name { get; set; }
+        public double Er { get; set; }
+        public double Sigma { get; set; }
 
         public Material() { }
         public Material(string name, double er, double sigma)
@@ -18,6 +19,11 @@ namespace TLM.Core
             this.Name = name;
             this.Er = er;
             this.Sigma = sigma;
+        }
+
+        public override string ToString()
+        {
+            return this.Name;
         }
     }
 }
