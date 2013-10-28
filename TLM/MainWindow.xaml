@@ -1,8 +1,67 @@
-﻿<Window x:Class="TLM.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        xmlns:Drawing="clr-namespace:ILNumerics.Drawing;assembly=ILNumerics" xmlns:local="clr-namespace:TLM" x:Class="TLM.MainWindow"
+        Title="TLM.net" Height="700" Width="800" Icon="Resources/sim.ico">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="File"/>
+            <MenuItem Header="Help"/>
+        </Menu>
+        <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1">
+            <TabItem Header="Simulation">
+                <Grid Margin="0,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" >
+                        <Label Content="Size X:"/>
+                        <TextBox x:Name="TBSizeX" Margin="20,0" Text="10E-2"/>
+                        <Label Content="Size Y:"/>
+                        <TextBox x:Name="TBSizeY" Margin="20,0" Text="2E-2"/>
+                        <Label Content="Sigma:"/>
+                        <TextBox x:Name="TBSigma" Margin="20,0" Text="5E-15"/>
+                        <Label Content="Delta L:"/>
+                        <TextBox x:Name="TBdL" Margin="20,0" Text="1E-3"/>
+                        <Label Content="Z0:"/>
+                        <TextBox x:Name="TBZ0" Margin="20,0" Text="377"/>
+                        <Label Content="Er:"/>
+                        <TextBox x:Name="TBEr" Margin="20,0" Text="1"/>
+                        <Label Content="Freq:"/>
+                        <TextBox x:Name="TBFreq" Margin="20,0" Text="10E9"/>
+                        <Label Content="C:"/>
+                        <TextBox x:Name="TBC" Margin="20,0" Text="300E6"/>
+                        <Label Content="N:"/>
+                        <TextBox x:Name="TBN" Margin="20,0" Text="43"/>
+                        <Label Content="Boundaries:"/>
+                        <Grid Height="75">
+                            <TextBox Height="22" Width="60" x:Name="TBBoundTop" Margin="60,10,60,43" Text="1"/>
+                            <TextBox Height="22" Width="60" x:Name="TBBoundBot" Margin="65,37,65,16" Text="1"/>
+                            <TextBox Height="22" Width="60" x:Name="TBBoundLeft" Margin="0,26,130,27" Text="-0.17157"/>
+                            <TextBox Height="22" Width="60" x:Name="TBBoundRight" Margin="130,26,0,27" Text="-0.17157"/>
+                        </Grid>
+                        <Button x:Name="BTCreateNet" Click="BTCreateNet_Click" Content="Create Net"/>
+                    </StackPanel>
+                    <local:NetDesigner x:Name="Designer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1"/>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Plot">
+                <Grid>
+                    <WindowsFormsHost Margin="0,0,0,0" Grid.Column="1" >
+                        <Drawing:ILPanel x:Name="ilPanel" Driver="GDI"/>
+                    </WindowsFormsHost>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <StatusBar HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Stretch"/>
+
+
     </Grid>
 </Window>
