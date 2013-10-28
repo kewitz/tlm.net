@@ -39,7 +39,7 @@ namespace TLM
                 DesignCanvas.Children.Add(graphicNode);
                 graphicNode.Margin = new Thickness(n.j * Spacing, n.i * Spacing, 0, 0);
             }
-
+            
             DesignCanvas.Width = WorkingNet.shape[0] * 10;
             DesignCanvas.Height = WorkingNet.shape[1] * 10;
         }

@@ -27,11 +27,14 @@ namespace TLM
     public partial class MainWindow : Window
     {
         private Net net;
+        private List<Material> defaultMaterials;
 
         public MainWindow()
         {
             InitializeComponent();
+            
             var signal = ILMath.ones<float>(10, 10);
+            
             var scene = new ILScene {
                 new ILPlotCube(twoDMode: false) {
                     //new ILPoints {

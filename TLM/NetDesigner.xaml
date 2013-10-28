@@ -12,7 +12,7 @@
         </Grid.RowDefinitions>
         <ToolBar Grid.Row="0"></ToolBar>
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#FF141414">
-            <Canvas x:Name="DesignCanvas" Grid.Row="1" Background="#FF141414" Margin="10"></Canvas>
+            <Canvas x:Name="DesignCanvas" Grid.Row="1" Background="#FF141414" Margin="2" RenderOptions.EdgeMode="Unspecified" RenderOptions.BitmapScalingMode="NearestNeighbor"></Canvas>
         </ScrollViewer>
     </Grid>
 </UserControl>

@@ -25,6 +25,10 @@
                         <TextBox x:Name="TBSizeX" Margin="20,0" Text="10E-2"/>
                         <Label Content="Size Y:"/>
                         <TextBox x:Name="TBSizeY" Margin="20,0" Text="2E-2"/>
+                        <Label Content="Material:"/>
+                        <ComboBox Margin="20,0">
+                            
+                        </ComboBox>
                         <Label Content="Sigma:"/>
                         <TextBox x:Name="TBSigma" Margin="20,0" Text="5E-15"/>
                         <Label Content="Delta L:"/>
@@ -48,8 +52,13 @@
                         </Grid>
                         <Button x:Name="BTCreateNet" Click="BTCreateNet_Click" Content="Create Net"/>
                     </StackPanel>
-                    <local:NetDesigner x:Name="Designer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1"/>
-
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="200"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <local:NetDesigner x:Name="Designer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"/>
+                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="Plot">
