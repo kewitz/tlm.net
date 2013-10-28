@@ -14,6 +14,7 @@ namespace TLM.Core
         public double x, y, sigma, Er, dL, Ylt, Gs, Ys, Y;
         public int i, j;
         public bool input;
+        public Material material;
         public Ports Vi, Vr;
 
         public Node() { }
