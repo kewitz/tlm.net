@@ -11,25 +11,24 @@ namespace TLM.Core
     [Serializable]
     public class Node : ILNumerics.ILMath
     {
-        public double x, y, sigma, Er, dL, Ylt, Gs, Ys, Y;
+        public double x, y, dL, Ylt, Gs, Ys, Y;
         public int i, j;
         public bool input;
         public Material material;
         public Ports Vi, Vr;
 
         public Node() { }
-        public Node(int i, int j, double sigma, double dL, double Ylt, double Er, int N, bool input = false)
+        public Node(int i, int j, Material mat, double dL, double Ylt, int N, bool input = false)
         {
             this.i = i;
             this.j = j;
-            this.sigma = sigma;
-            this.Er = Er;
+            this.material = mat;            
             this.dL = dL;
             this.Ylt = Ylt;
             this.x = j * dL;
             this.y = i * dL;
-            this.Gs = (sigma * dL) / Ylt;
-            this.Ys = 4 * (Er - 1);
+            this.Gs = (mat.Sigma * dL) / Ylt;
+            this.Ys = 4 * (mat.Er - 1);
             this.Y = 4 + Ys + Gs;
             this.Vi = new Ports(N);
             this.Vr = new Ports(N);

@@ -13,8 +13,9 @@ namespace TLM.Core
         public double Er, Sigma;
 
         public Material() { }
-        public Material(double er, double sigma)
+        public Material(string name, double er, double sigma)
         {
+            this.Name = name;
             this.Er = er;
             this.Sigma = sigma;
         }
