@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Windows Desktop
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLM", "TLM\TLM.csproj", "{4684C534-7982-47EF-8B42-B1F22B203CE5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLM.Core", "TLM.Core\TLM.Core.csproj", "{98669278-10F0-4455-94BC-540ADF2602CD}"

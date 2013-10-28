@@ -26,17 +26,11 @@
                         <Label Content="Size Y:"/>
                         <TextBox x:Name="TBSizeY" Margin="20,0" Text="2E-2"/>
                         <Label Content="Material:"/>
-                        <ComboBox Margin="20,0">
-                            
-                        </ComboBox>
-                        <Label Content="Sigma:"/>
-                        <TextBox x:Name="TBSigma" Margin="20,0" Text="5E-15"/>
+                        <ComboBox x:Name="CBMat" Margin="20,0"/>
                         <Label Content="Delta L:"/>
                         <TextBox x:Name="TBdL" Margin="20,0" Text="1E-3"/>
                         <Label Content="Z0:"/>
                         <TextBox x:Name="TBZ0" Margin="20,0" Text="377"/>
-                        <Label Content="Er:"/>
-                        <TextBox x:Name="TBEr" Margin="20,0" Text="1"/>
                         <Label Content="Freq:"/>
                         <TextBox x:Name="TBFreq" Margin="20,0" Text="10E9"/>
                         <Label Content="C:"/>

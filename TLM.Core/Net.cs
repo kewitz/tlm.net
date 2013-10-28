@@ -15,30 +15,32 @@ namespace TLM.Core
         public event EventHandler<string> StatusUpdate;
         public event EventHandler CalcDone;
 
-        public double dL, Ylt, Er, c, f0, x, y, Z0, sigma, lambda0, tal0, tc, dT, Vlt, Zlt;
+        public double dL, Ylt, c, f0, x, y, Z0, lambda0, tal0, tc, dT, Vlt, Zlt;
         public int N;
         public int[] shape;
         public List<Node> Nodes;
         public Boundaries boundaries;
         public string Fk;
+        public Material material;
+        public List<Material> matList;
+        
 
         public Net() { }
-        public Net(double sizeX, double sizeY, double sigma, double dL, double Z0, double Er, double f0, double c, int N, Boundaries bounds)
+        public Net(double sizeX, double sizeY, Material mat, double dL, double Z0, double f0, double c, int N, Boundaries bounds)
         {
+            
             ILRetArray<double> vecX = ILNumerics.ILMath.vec<double>(0, dL, sizeX).ToArray();
             ILRetArray<double> vecY = ILNumerics.ILMath.vec<double>(0, dL, sizeY).ToArray();
             double sqrt2 = Math.Sqrt(2.0);
 
             this.shape = new int[2] { vecX.Count(), vecY.Count() };
             this.dL = dL;
-            this.Er = Er;
+            this.material = mat;
             this.c = c;
             this.f0 = f0;
             this.dL = dL;
             this.N = N;
-            this.Z0 = Z0;
-            this.Er = Er;
-            this.sigma = sigma;
+            this.Z0 = Z0;            
             this.lambda0 = this.c / this.f0;
             this.tal0 = this.lambda0 / this.c;
             this.tc = (5 * this.tal0) / 2;
@@ -56,10 +58,15 @@ namespace TLM.Core
                 {
                     int i = vecY.ToList().IndexOf(y);
                     bool input = j == 0;
-                    Node newNode = new Node(i, j, this.sigma, this.dL, this.Ylt, this.Er, this.N, input);
+                    Node newNode = new Node(i, j, this.material, this.dL, this.Ylt, this.N, input);
                     Nodes.Add(newNode);
                 }
             }
+        }
+
+        public Material getMaterial(string name)
+        {
+            return (from mat in this.matList where mat.Name == name select mat).FirstOrDefault();
         }
 
         public Node GetNode(int i, int j)
