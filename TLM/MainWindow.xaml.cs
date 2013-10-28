@@ -64,6 +64,7 @@ namespace TLM
         void DGMatList_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
             CBMat.ItemsSource = defaultMaterials.Where(mat => mat.Name != "");
+            Designer.MatList.ItemsSource = defaultMaterials.Where(mat => mat.Name != "");
         }
 
         void DGMatList_ManipulationCompleted(object sender, ManipulationCompletedEventArgs e)

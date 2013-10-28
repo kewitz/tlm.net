@@ -10,7 +10,9 @@
             <RowDefinition Height="24"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <ToolBar Grid.Row="0"></ToolBar>
+        <ToolBar Grid.Row="0">
+            <ComboBox Width="100" x:Name="MatList"></ComboBox>
+        </ToolBar>
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#FF141414">
             <Canvas x:Name="DesignCanvas" Grid.Row="1" Background="#FF141414" Margin="2" RenderOptions.EdgeMode="Unspecified" RenderOptions.BitmapScalingMode="NearestNeighbor"></Canvas>
         </ScrollViewer>
