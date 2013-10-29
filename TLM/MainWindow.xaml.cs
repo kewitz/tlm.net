@@ -91,27 +91,5 @@ namespace TLM
             Designer.WorkingNet = this.net;
             Designer.DrawNet();
         }
-
-        private void CBMat_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            System.Drawing.Color matColor =
-                CustomColor(this.defaultMaterials.ToArray().Length, CBMat.SelectedIndex);
-        }
-
-        private System.Drawing.Color CustomColor(int matElements, int dataPos)
-        {
-            // get default 'IlNumerics' colormap
-            var colormap = new ILColormap(Colormaps.ILNumerics);
-            
-            // get a corresponding element from the colormap
-            float customColor = colormap.Data.ElementAtOrDefault(dataPos);
-            // transform the small decimal value into a bit integer and return it as a color
-            customColor = customColor * 1000000000;
-
-            return System.Drawing.Color.FromArgb(Convert.ToInt32(customColor));
-        }
-
-        
-
     }
 }

@@ -26,7 +26,7 @@
                         <Label Content="Size Y:"/>
                         <TextBox x:Name="TBSizeY" Margin="20,0" Text="2E-2"/>
                         <Label Content="Material:"/>
-                        <ComboBox x:Name="CBMat" Margin="20,0" SelectionChanged="CBMat_SelectionChanged"/>
+                        <ComboBox x:Name="CBMat" Margin="20,0"/>
                         <Label Content="Delta L:"/>
                         <TextBox x:Name="TBdL" Margin="20,0" Text="1E-3"/>
                         <Label Content="Z0:"/>
@@ -56,7 +56,7 @@
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
                         <DataGrid x:Name="DGMatList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" CanUserResizeRows="False" EnableRowVirtualization="False"/>
-                        <local:NetDesigner x:Name="Designer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="2"/>
+                        <local:NetDesigner x:Name="Designer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="2" Loaded="Designer_Loaded"/>
                     </Grid>
                 </Grid>
             </TabItem>
