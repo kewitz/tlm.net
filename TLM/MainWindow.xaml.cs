@@ -51,6 +51,7 @@ namespace TLM
                     new ILSurface(signal) {
                         Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
                         Colormap = Colormaps.Summer, 
+                        
                     }
                 }
             };
@@ -78,9 +79,9 @@ namespace TLM
             double bTop = Convert.ToDouble(TBBoundTop.Text, System.Globalization.CultureInfo.InvariantCulture);
             double bLeft = Convert.ToDouble(TBBoundLeft.Text, System.Globalization.CultureInfo.InvariantCulture);
             double bBot = Convert.ToDouble(TBBoundBot.Text, System.Globalization.CultureInfo.InvariantCulture);
-            double bRight = Convert.ToDouble(TBBoundRight.Text, System.Globalization.CultureInfo.InvariantCulture);
-            
+            double bRight = Convert.ToDouble(TBBoundRight.Text, System.Globalization.CultureInfo.InvariantCulture);            
             this.net = new Net(sizeX, sizeY, mat, dL, z0, f0, C, N, new Boundaries(bTop, bBot, bLeft, bRight));
+            
         }
         
 
@@ -90,5 +91,27 @@ namespace TLM
             Designer.WorkingNet = this.net;
             Designer.DrawNet();
         }
+
+        private void CBMat_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            System.Drawing.Color matColor =
+                CustomColor(this.defaultMaterials.ToArray().Length, CBMat.SelectedIndex);
+        }
+
+        private System.Drawing.Color CustomColor(int matElements, int dataPos)
+        {
+            // get default 'IlNumerics' colormap
+            var colormap = new ILColormap(Colormaps.ILNumerics);
+            
+            // get a corresponding element from the colormap
+            float customColor = colormap.Data.ElementAtOrDefault(dataPos);
+            // transform the small decimal value into a bit integer and return it as a color
+            customColor = customColor * 1000000000;
+
+            return System.Drawing.Color.FromArgb(Convert.ToInt32(customColor));
+        }
+
+        
+
     }
 }
