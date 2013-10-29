@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Drawing="clr-namespace:ILNumerics.Drawing;assembly=ILNumerics" xmlns:local="clr-namespace:TLM" x:Class="TLM.MainWindow"
-        Title="TLM.net" Height="700" Width="800" Icon="Resources/sim.ico">
+        Title="TLM.net" Height="800" Width="800" Icon="Resources/sim.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -26,7 +26,7 @@
                         <Label Content="Size Y:"/>
                         <TextBox x:Name="TBSizeY" Margin="20,0" Text="2E-2"/>
                         <Label Content="Material:"/>
-                        <ComboBox x:Name="CBMat" Margin="20,0"/>
+                        <ComboBox x:Name="CBMat" Margin="20,0" SelectedIndex="0"/>
                         <Label Content="Delta L:"/>
                         <TextBox x:Name="TBdL" Margin="20,0" Text="1E-3"/>
                         <Label Content="Z0:"/>
@@ -37,6 +37,8 @@
                         <TextBox x:Name="TBC" Margin="20,0" Text="300E6"/>
                         <Label Content="N:"/>
                         <TextBox x:Name="TBN" Margin="20,0" Text="43"/>
+                        <Label Content="F(k):"/>
+                        <TextBox x:Name="TBFk" Margin="20,0" Height="45" Text="Sin(2*[Pi]*[f0]*([k]+1)*[dT])"/>
                         <Label Content="Boundaries:"/>
                         <Grid Height="75">
                             <TextBox Height="22" Width="60" x:Name="TBBoundTop" Margin="60,10,60,43" Text="1"/>
@@ -45,6 +47,7 @@
                             <TextBox Height="22" Width="60" x:Name="TBBoundRight" Margin="130,26,0,27" Text="-0.17157"/>
                         </Grid>
                         <Button x:Name="BTCreateNet" Click="BTCreateNet_Click" Margin="20,0" Content="Create Net"/>
+                        <Button x:Name="BTRun" Margin="20,5" Content="Run" Click="BTRun_Click"/>
                     </StackPanel>
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
@@ -56,19 +59,26 @@
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
                         <DataGrid x:Name="DGMatList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" CanUserResizeRows="False" EnableRowVirtualization="False"/>
-                        <local:NetDesigner x:Name="Designer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="2" Loaded="Designer_Loaded"/>
+                        <local:NetDesigner x:Name="Designer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="2"/>
                     </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="Plot">
                 <Grid>
-                    <WindowsFormsHost Margin="0,0,0,0" Grid.Column="1" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Slider x:Name="ResultSeeker" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0"/>
+                    <WindowsFormsHost Margin="0,0,0,0" Grid.Row="1" >
                         <Drawing:ILPanel x:Name="ilPanel" Driver="GDI"/>
                     </WindowsFormsHost>
                 </Grid>
             </TabItem>
         </TabControl>
-        <StatusBar HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Stretch"/>
+        <StatusBar HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Stretch">
+            <TextBlock x:Name="StatusInfo" TextWrapping="Wrap" Text="..."/>
+        </StatusBar>
 
 
     </Grid>

@@ -119,11 +119,12 @@ namespace TLM.Core
                 var needSolve = (from node in Nodes
                                  where node.Vi.NeedToSolve(k)
                                  select node).ToList();
-                Parallel.ForEach(needSolve, n => n.SolveScatter(k));
+                Parallel.ForEach(Nodes, n => n.SolveScatter(k));
                 //Transmit
                 Parallel.ForEach(Nodes, n => Transmit(n, k + 1));
 
-                Progress.Invoke(this, k);
+                if ( Progress != null )
+                    Progress.Invoke(this, k);
 #if DEBUG
                 Console.Write(String.Format("\rSolving {0} iteration...", k));
 #endif
