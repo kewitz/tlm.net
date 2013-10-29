@@ -22,13 +22,25 @@ namespace TLM.Core
         public Boundaries boundaries;
         public string Fk;
         public Material material;
-        public List<Material> matList;
-        
+        public List<Material> matList = new List<Material>() {
+                new Material("Air", 1, 5E-15),
+                new Material("Teflon", 2.1, 1E-24),
+                new Material("Wood", 4, 1E-15),
+                new Material("Concrete", 5, 13E-3),
+                new Material("Glass", 4.7, 1E-13),
+                new Material("Rubber", 7, 1E-14),
+                new Material("Diamond", 7.5, 1E-13),
+                new Material("Graphite", 1E-15, 2.5E5),
+                new Material("Silicon", 11.68, 1.56E-3),
+                new Material("Sulfur", 3.5, 1E-16),
+                new Material("Water(20°C)", 80.1, 5E-3)
+            };
+
 
         public Net() { }
         public Net(double sizeX, double sizeY, Material mat, double dL, double Z0, double f0, double c, int N, Boundaries bounds)
         {
-            
+
             ILRetArray<double> vecX = ILNumerics.ILMath.vec<double>(0, dL, sizeX).ToArray();
             ILRetArray<double> vecY = ILNumerics.ILMath.vec<double>(0, dL, sizeY).ToArray();
             double sqrt2 = Math.Sqrt(2.0);
@@ -40,7 +52,7 @@ namespace TLM.Core
             this.f0 = f0;
             this.dL = dL;
             this.N = N;
-            this.Z0 = Z0;            
+            this.Z0 = Z0;
             this.lambda0 = this.c / this.f0;
             this.tal0 = this.lambda0 / this.c;
             this.tc = (5 * this.tal0) / 2;

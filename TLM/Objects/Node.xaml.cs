@@ -26,7 +26,6 @@ namespace TLM.Objects
         {
             InitializeComponent();
             this.node = n;
-
         }
     }
 }

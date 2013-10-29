@@ -11,10 +11,21 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <ToolBar Grid.Row="0">
-            <ComboBox Width="100" x:Name="MatList"></ComboBox>
+            <ComboBox Width="100" x:Name="MatList" SelectedIndex="0"></ComboBox>
+            <ToggleButton x:Name="EditMaterial" Width="16" Height="16">
+                <ToggleButton.Background>
+                    <ImageBrush ImageSource="Resources/paint-brush.png" Stretch="None"/>
+                </ToggleButton.Background>
+            </ToggleButton>
+            <ToggleButton x:Name="EraseMaterial" Width="16" Height="16">
+                <ToggleButton.Background>
+                    <ImageBrush ImageSource="Resources/eraser.png" Stretch="None"/>
+                </ToggleButton.Background>
+            </ToggleButton>
         </ToolBar>
-        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#FF141414">
-            <Canvas x:Name="DesignCanvas" Grid.Row="1" Background="#FF141414" Margin="2" RenderOptions.EdgeMode="Unspecified" RenderOptions.BitmapScalingMode="NearestNeighbor"></Canvas>
+        <ScrollViewer Grid.Row="1"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#FF141414" >
+                <Canvas x:Name="DesignCanvas" Grid.Row="1" Background="#FF141414" Margin="2" RenderOptions.EdgeMode="Unspecified" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderTransformOrigin="0.5,0.5"/>
         </ScrollViewer>
+        <Label x:Name="NodeInfo" Grid.Row="1" Foreground="#FF30D665" HorizontalAlignment="Left" VerticalAlignment="Top">Node:</Label>
     </Grid>
 </UserControl>

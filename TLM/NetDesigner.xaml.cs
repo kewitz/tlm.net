@@ -24,7 +24,7 @@ namespace TLM
     {
         public Net WorkingNet { get; set; }
         public int Spacing = 10;
-        
+
         public NetDesigner()
         {
             InitializeComponent();
@@ -38,10 +38,24 @@ namespace TLM
                 Objects.Node graphicNode = new Objects.Node(n);
                 DesignCanvas.Children.Add(graphicNode);
                 graphicNode.Margin = new Thickness(n.j * Spacing, n.i * Spacing, 0, 0);
+                graphicNode.MouseEnter += graphicNode_MouseEnter;
             }
-            
+
             DesignCanvas.Width = WorkingNet.shape[0] * 10;
             DesignCanvas.Height = WorkingNet.shape[1] * 10;
         }
+
+        void graphicNode_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Objects.Node s = (Objects.Node)sender;
+            string info = string.Format("{0}:{1}  -  Material: {2}", s.node.i, s.node.j, s.node.material.Name);
+            NodeInfo.Content = info;
+        }
+
+        public void UpdateInfoLabel(string s)
+        {
+            NodeInfo.Content = s;
+        }
+
     }
 }

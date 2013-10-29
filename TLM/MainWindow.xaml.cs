@@ -26,31 +26,18 @@ namespace TLM
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Net net;
-        private List<Material> defaultMaterials;
+        private Net net = new Net();
 
         public MainWindow()
         {
-
             InitializeComponent();
+            
             var signal = ILMath.ones<float>(10, 10);
 
-            defaultMaterials = new List<Material>() {
-                new Material("Air", 1, 5E-15),
-                new Material("Teflon", 2.1, 1E-24),
-                new Material("Wood", 4, 1E-15),
-                new Material("Concrete", 5, 13E-3),
-                new Material("Glass", 4.7, 1E-13),
-                new Material("Rubber", 7, 1E-14),
-                new Material("Diamond", 7.5, 1E-13),
-                new Material("Graphite", 1E-15, 2.5E5),
-                new Material("Silicon", 11.68, 1.56E-3),
-                new Material("Sulfur", 3.5, 1E-16),
-                new Material("Water(20°C)", 80.1, 5E-3)
-            };
-            CBMat.ItemsSource = defaultMaterials.Where(mat => mat.Name != "");
+            CBMat.ItemsSource = net.matList.Where(mat => mat.Name != "");
+            Designer.MatList.ItemsSource = net.matList.Where(mat => mat.Name != "");
 
-            DGMatList.ItemsSource = defaultMaterials;
+            DGMatList.ItemsSource = net.matList;
             DGMatList.RowEditEnding += DGMatList_RowEditEnding;
 
             var scene = new ILScene {
@@ -73,14 +60,10 @@ namespace TLM
 
         void DGMatList_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
-            CBMat.ItemsSource = defaultMaterials.Where(mat => mat.Name != "");
-            Designer.MatList.ItemsSource = defaultMaterials.Where(mat => mat.Name != "");
+            CBMat.ItemsSource = net.matList.Where(mat => mat.Name != "");
+            Designer.MatList.ItemsSource = net.matList.Where(mat => mat.Name != "");
         }
 
-        void DGMatList_ManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
-        {
-            CBMat.ItemsSource = defaultMaterials.Where(mat => mat.Name != "");
-        }
 
         public void CreateNet()
         {

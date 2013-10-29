@@ -5,16 +5,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Rectangle x:Name="Dot" Height="8" Width="8" HorizontalAlignment="Left" VerticalAlignment="Top" Stroke="#FFBF30D6">
+    <Grid>
+    <Rectangle x:Name="Dot" Height="8" Width="8" HorizontalAlignment="Left" VerticalAlignment="Top" Fill="#00000000">
         <Rectangle.Style>
             <Style TargetType="{x:Type Rectangle}">
-                <Setter Property="Fill" Value="Transparent"></Setter>
+                    <Setter Property="Stroke" Value="#8830D665"></Setter>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Fill" Value="White"/>
+                            <Setter Property="Stroke" Value="#FF30D665"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>
         </Rectangle.Style>
     </Rectangle>
+    </Grid>
 </UserControl>

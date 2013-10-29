@@ -26,7 +26,7 @@
                         <Label Content="Size Y:"/>
                         <TextBox x:Name="TBSizeY" Margin="20,0" Text="2E-2"/>
                         <Label Content="Material:"/>
-                        <ComboBox x:Name="CBMat" Margin="20,0"/>
+                        <ComboBox x:Name="CBMat" Margin="20,0" SelectedIndex="0"/>
                         <Label Content="Delta L:"/>
                         <TextBox x:Name="TBdL" Margin="20,0" Text="1E-3"/>
                         <Label Content="Z0:"/>
@@ -44,7 +44,7 @@
                             <TextBox Height="22" Width="60" x:Name="TBBoundLeft" Margin="0,26,130,27" Text="-0.17157"/>
                             <TextBox Height="22" Width="60" x:Name="TBBoundRight" Margin="130,26,0,27" Text="-0.17157"/>
                         </Grid>
-                        <Button x:Name="BTCreateNet" Click="BTCreateNet_Click" Content="Create Net"/>
+                        <Button x:Name="BTCreateNet" Click="BTCreateNet_Click" Margin="20,0" Content="Create Net"/>
                     </StackPanel>
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
