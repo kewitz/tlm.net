@@ -29,7 +29,8 @@ namespace TLM
     {
         Thread solver;
         private Net net = new Net();
-        private ILSurface surf;
+        private ILScene scene;
+        private ILPlotCube plot;
 
         public MainWindow()
         {
@@ -42,15 +43,16 @@ namespace TLM
             DGMatList.ItemsSource = net.matList;
             DGMatList.RowEditEnding += DGMatList_RowEditEnding;
 
-            var scene = new ILScene();
-            var pc = scene.Add(new ILPlotCube(twoDMode: false));
+            scene = new ILScene();
+            plot = new ILPlotCube(twoDMode: false);
+            scene.Add(plot);
             var signal = ILMath.ones<float>(10, 10);
-            surf = new ILSurface(signal)
+            ILSurface surf = new ILSurface(signal)
             {
                 Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
                 Colormap = Colormaps.Summer,
             };
-            pc.Add(surf);
+            plot.Add(surf);
             scene.First<ILPlotCube>().Rotation = Matrix4.Rotation(new Vector3(1f, 0.23f, 1), 0.7f);
             ilPanel.Scene.Add(scene);
 
@@ -114,18 +116,16 @@ namespace TLM
                            select node.GetEz(iteration)).ToArray();
             var values = ILMath.tosingle((ILArray<double>)dvalues);
             values = ILMath.reshape(values, new int[] { net.shape[0], net.shape[1] });
-            ilPanel.Scene.Children.Clear();
-            var scene = new ILScene();
-            var pc = scene.Add(new ILPlotCube(twoDMode: false));
+
+            plot.Children.Clear();
             var signal = ILMath.ones<float>(10, 10);
-            surf = new ILSurface(values)
+            ILSurface surf = new ILSurface(values)
             {
                 Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
                 Colormap = Colormaps.Summer,
             };
-            pc.Add(surf);
+            plot.Add(surf);
             //scene.First<ILPlotCube>().Rotation = Matrix4.Rotation(new Vector3(1f, 0.23f, 1), 0.7f);
-            ilPanel.Scene.Add(scene);
             ilPanel.Refresh();
         }
 

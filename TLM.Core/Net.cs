@@ -69,11 +69,14 @@ namespace TLM.Core
                 foreach (var y in vecY)
                 {
                     int i = vecY.ToList().IndexOf(y);
-                    bool input = j == 0;
+                    //bool input = j == 0;
+                    bool input = false;
                     Node newNode = new Node(i, j, this.material, this.dL, this.Ylt, this.N, input);
                     Nodes.Add(newNode);
                 }
             }
+
+            GetNode(4, 40).input = true;
         }
 
         public Material getMaterial(string name)
