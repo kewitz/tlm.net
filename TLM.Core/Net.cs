@@ -107,6 +107,7 @@ namespace TLM.Core
 
         public void Run()
         {
+            Nodes.ForEach(n => n.ClearSimulation());
             for (int k = 0; k < this.N - 1; k++)
             {
                 //Excitação

@@ -26,5 +26,15 @@ namespace TLM.Core
         {
             return this.P1[k] != 0 && this.P2[k] != 0 && this.P3[k] != 0 && this.P4[k] != 0;
         }
+
+        public void ClearValues()
+        {
+            int size = P1.Count;
+            P1 = ILMath.zeros<double>(size).ToList();
+            P2 = ILMath.zeros<double>(size).ToList();
+            P3 = ILMath.zeros<double>(size).ToList();
+            P4 = ILMath.zeros<double>(size).ToList();
+            P5 = ILMath.zeros<double>(size).ToList();
+        }
     }
 }

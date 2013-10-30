@@ -35,6 +35,12 @@ namespace TLM.Core
             this.input = input;
         }
 
+        public void ClearSimulation()
+        {
+            this.Vi.ClearValues();
+            this.Vr.ClearValues();
+        }
+
         public void SetEz(int k, double Ez)
         {
             double vz = Ez * this.dL;
