@@ -39,27 +39,26 @@ namespace TLM
                 DesignCanvas.Children.Add(graphicNode);
                 graphicNode.Margin = new Thickness(n.j * Spacing, n.i * Spacing, 0, 0);
                 graphicNode.MouseEnter += graphicNode_MouseEnter;
-                graphicNode.MouseDown += graphicNode_MouseDown;
             }
 
             DesignCanvas.Width = WorkingNet.shape[0] * 10;
             DesignCanvas.Height = WorkingNet.shape[1] * 10;
         }
 
-        void graphicNode_MouseDown(object sender, MouseButtonEventArgs e)
+        void BrushEvent(Objects.Node s)
         {
-            Objects.Node n = (Objects.Node)sender;
+            //Objects.Node s = (Objects.Node)sender;
             //Seta Material
             if (ToggleMaterial.IsChecked == true)
             {
-                n.node.material = n.node.material == WorkingNet.material ? (Material)MatList.SelectedValue : WorkingNet.material;
+                s.node.material = s.node.material == WorkingNet.material ? (Material)MatList.SelectedValue : WorkingNet.material;
             }
             //Seta Input
             if (ToggleInput.IsChecked == true)
             {
-                n.node.input = !n.node.input;
+                s.node.input = !s.node.input;
             }
-            n.Redraw();
+            s.Redraw();
         }
 
         void graphicNode_MouseEnter(object sender, MouseEventArgs e)
@@ -67,6 +66,8 @@ namespace TLM
             Objects.Node s = (Objects.Node)sender;
             string info = string.Format("{0}:{1}  -  Material: {2}", s.node.i, s.node.j, s.node.material.Name);
             NodeInfo.Content = info;
+            if (e.LeftButton == MouseButtonState.Pressed)
+                BrushEvent(s);
         }
 
         public void UpdateInfoLabel(string s)

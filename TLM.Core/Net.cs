@@ -132,9 +132,6 @@ namespace TLM.Core
 
                 if ( Progress != null )
                     Progress.Invoke(this, k);
-#if DEBUG
-                Console.Write(String.Format("\rSolving {0} iteration...", k));
-#endif
             }
         }
 
