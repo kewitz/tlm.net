@@ -18,7 +18,7 @@ namespace TLM.Core
         public double dL, Ylt, c, f0, x, y, Z0, lambda0, tal0, tc, dT, Vlt, Zlt;
         public int N;
         public int[] shape;
-        public List<Node> Nodes;
+        public List<Node> Nodes = new List<Node>();
         public Boundaries boundaries;
         public string Fk;
         public Material material;
@@ -40,12 +40,8 @@ namespace TLM.Core
         public Net() { }
         public Net(double sizeX, double sizeY, Material mat, double dL, double Z0, double f0, double c, int N, Boundaries bounds)
         {
-
-            ILRetArray<double> vecX = ILNumerics.ILMath.vec<double>(0, dL, sizeX).ToArray();
-            ILRetArray<double> vecY = ILNumerics.ILMath.vec<double>(0, dL, sizeY).ToArray();
-            double sqrt2 = Math.Sqrt(2.0);
-
-            this.shape = new int[2] { vecX.Count(), vecY.Count() };
+            this.x = sizeX;
+            this.y = sizeY;
             this.dL = dL;
             this.material = mat;
             this.c = c;
@@ -53,6 +49,18 @@ namespace TLM.Core
             this.dL = dL;
             this.N = N;
             this.Z0 = Z0;
+            this.boundaries = bounds;
+            this.Calc();
+        }
+
+        public void Calc()
+        {
+            Nodes.Clear();
+            ILRetArray<double> vecX = ILNumerics.ILMath.vec<double>(0, this.dL, this.x).ToArray();
+            ILRetArray<double> vecY = ILNumerics.ILMath.vec<double>(0, this.dL, this.y).ToArray();
+            this.shape = new int[2] { vecX.Count(), vecY.Count() };
+
+            double sqrt2 = Math.Sqrt(2.0);
             this.lambda0 = this.c / this.f0;
             this.tal0 = this.lambda0 / this.c;
             this.tc = (5 * this.tal0) / 2;
@@ -60,9 +68,7 @@ namespace TLM.Core
             this.Vlt = sqrt2 * this.c;
             this.Zlt = sqrt2 * this.Z0;
             this.Ylt = 1 / this.Zlt;
-            this.boundaries = bounds;
 
-            Nodes = new List<Node>();
             foreach (var x in vecX)
             {
                 int j = vecX.ToList().IndexOf(x);
@@ -75,8 +81,6 @@ namespace TLM.Core
                     Nodes.Add(newNode);
                 }
             }
-
-            GetNode(4, 40).input = true;
         }
 
         public Material getMaterial(string name)

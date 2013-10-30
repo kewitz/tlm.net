@@ -20,12 +20,23 @@ namespace TLM.Objects
     /// </summary>
     public partial class Node : UserControl
     {
-       public TLM.Core.Node node;
+        public TLM.Core.Node node;
+        public Color color;
 
         public Node(TLM.Core.Node n)
         {
             InitializeComponent();
             this.node = n;
+            this.Redraw();
         }
+
+        public void Redraw()
+        {
+            this.color = Color.FromArgb(node.material.color.A, node.material.color.R, node.material.color.G, node.material.color.B);
+            Dot.Stroke = new SolidColorBrush(color);
+            Dot.Fill = this.node.input? new SolidColorBrush(color) : Brushes.Transparent;
+        }
+
+
     }
 }

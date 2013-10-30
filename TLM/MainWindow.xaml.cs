@@ -73,21 +73,21 @@ namespace TLM
 
         public void CreateNet()
         {
-            double sizeX = Convert.ToDouble(TBSizeX.Text, System.Globalization.CultureInfo.InvariantCulture);
-            double sizeY = Convert.ToDouble(TBSizeY.Text, System.Globalization.CultureInfo.InvariantCulture);
-            Material mat = CBMat.SelectedItem as Material;
-            double dL = Convert.ToDouble(TBdL.Text, System.Globalization.CultureInfo.InvariantCulture);
-            double z0 = Convert.ToDouble(TBZ0.Text, System.Globalization.CultureInfo.InvariantCulture);
-            double f0 = Convert.ToDouble(TBFreq.Text, System.Globalization.CultureInfo.InvariantCulture);
-            double C = Convert.ToDouble(TBC.Text, System.Globalization.CultureInfo.InvariantCulture);
-            int N = Convert.ToInt32(TBN.Text, System.Globalization.CultureInfo.InvariantCulture);
+            net.x = Convert.ToDouble(TBSizeX.Text, System.Globalization.CultureInfo.InvariantCulture);
+            net.y = Convert.ToDouble(TBSizeY.Text, System.Globalization.CultureInfo.InvariantCulture);
+            net.material = CBMat.SelectedItem as Material;
+            net.dL = Convert.ToDouble(TBdL.Text, System.Globalization.CultureInfo.InvariantCulture);
+            net.Z0 = Convert.ToDouble(TBZ0.Text, System.Globalization.CultureInfo.InvariantCulture);
+            net.f0 = Convert.ToDouble(TBFreq.Text, System.Globalization.CultureInfo.InvariantCulture);
+            net.c = Convert.ToDouble(TBC.Text, System.Globalization.CultureInfo.InvariantCulture);
+            net.N = Convert.ToInt32(TBN.Text, System.Globalization.CultureInfo.InvariantCulture);
             double bTop = Convert.ToDouble(TBBoundTop.Text, System.Globalization.CultureInfo.InvariantCulture);
             double bLeft = Convert.ToDouble(TBBoundLeft.Text, System.Globalization.CultureInfo.InvariantCulture);
             double bBot = Convert.ToDouble(TBBoundBot.Text, System.Globalization.CultureInfo.InvariantCulture);
             double bRight = Convert.ToDouble(TBBoundRight.Text, System.Globalization.CultureInfo.InvariantCulture);
-            this.net = new Net(sizeX, sizeY, mat, dL, z0, f0, C, N, new Boundaries(bTop, bBot, bLeft, bRight));
+            net.boundaries = new Boundaries(bTop, bBot, bLeft, bRight);
             net.Fk = TBFk.Text;
-
+            net.Calc();
         }
 
         private void BTCreateNet_Click(object sender, RoutedEventArgs e)

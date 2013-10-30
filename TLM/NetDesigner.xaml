@@ -12,14 +12,14 @@
         </Grid.RowDefinitions>
         <ToolBar Grid.Row="0">
             <ComboBox Width="100" x:Name="MatList" SelectedIndex="0"/>
-            <ToggleButton x:Name="EditMaterial" Width="16" Height="16">
+            <ToggleButton x:Name="ToggleMaterial" Width="16" Height="16" ToolTip="Set Material">
                 <ToggleButton.Background>
                     <ImageBrush ImageSource="Resources/paint-brush.png" Stretch="None"/>
                 </ToggleButton.Background>
             </ToggleButton>
-            <ToggleButton x:Name="EraseMaterial" Width="16" Height="16">
+            <ToggleButton x:Name="ToggleInput" Width="16" Height="16" ToolTip="Set Input">
                 <ToggleButton.Background>
-                    <ImageBrush ImageSource="Resources/eraser.png" Stretch="None"/>
+                    <ImageBrush ImageSource="Resources/plug.png" Stretch="None"/>
                 </ToggleButton.Background>
             </ToggleButton>
         </ToolBar>
