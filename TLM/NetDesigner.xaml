@@ -11,7 +11,7 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <ToolBar Grid.Row="0">
-            <ComboBox Width="100" x:Name="MatList" SelectedIndex="0"></ComboBox>
+            <ComboBox Width="100" x:Name="MatList" SelectedIndex="0"/>
             <ToggleButton x:Name="EditMaterial" Width="16" Height="16">
                 <ToggleButton.Background>
                     <ImageBrush ImageSource="Resources/paint-brush.png" Stretch="None"/>
