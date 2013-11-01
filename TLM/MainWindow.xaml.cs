@@ -126,24 +126,11 @@ namespace TLM
             ilPanel.Refresh();
         }
 
-        private void TextParamChanged(object sender, TextChangedEventArgs e)
+        private void BTRecalcNet_Click_1(object sender, RoutedEventArgs e)
         {
-            if (this.IsInitialized)
-            {
-                CreateNet();
-                Designer.WorkingNet = this.net;
-                Designer.DrawNet();
-            }
-        }
-
-        private void ComboParamChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (this.IsInitialized)
-            {
-                CreateNet();
-                Designer.WorkingNet = this.net;
-                Designer.DrawNet();
-            }
+            CreateNet();
+            Designer.WorkingNet = this.net;
+            Designer.DrawNet();
         }
 
     }

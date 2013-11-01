@@ -22,31 +22,34 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel x:Name="ParamPanel" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" >
                         <Label Content="Size X:"/>
-                        <TextBox x:Name="TBSizeX" Margin="20,0" Text="10E-2" TextChanged="TextParamChanged"/>
+                        <TextBox x:Name="TBSizeX" Margin="20,0" Text="10E-2" />
                         <Label Content="Size Y:"/>
-                        <TextBox x:Name="TBSizeY" Margin="20,0" Text="2E-2" TextChanged="TextParamChanged"/>
+                        <TextBox x:Name="TBSizeY" Margin="20,0" Text="2E-2" />
                         <Label Content="Material:"/>
-                        <ComboBox x:Name="CBMat" Margin="20,0" SelectedIndex="0" SelectionChanged="ComboParamChanged" />
+                        <ComboBox x:Name="CBMat" Margin="20,0" SelectedIndex="0" />
                         <Label Content="Delta L:"/>
-                        <TextBox x:Name="TBdL" Margin="20,0" Text="1E-3" TextChanged="TextParamChanged"/>
+                        <TextBox x:Name="TBdL" Margin="20,0" Text="1E-3" />
                         <Label Content="Z0:"/>
-                        <TextBox x:Name="TBZ0" Margin="20,0" Text="377" TextChanged="TextParamChanged"/>
+                        <TextBox x:Name="TBZ0" Margin="20,0" Text="377" />
                         <Label Content="Freq:"/>
-                        <TextBox x:Name="TBFreq" Margin="20,0" Text="10E9" TextChanged="TextParamChanged"/>
+                        <TextBox x:Name="TBFreq" Margin="20,0" Text="10E9" />
                         <Label Content="C:"/>
-                        <TextBox x:Name="TBC" Margin="20,0" Text="300E6" TextChanged="TextParamChanged"/>
+                        <TextBox x:Name="TBC" Margin="20,0" Text="300E6" />
                         <Label Content="N:"/>
-                        <TextBox x:Name="TBN" Margin="20,0" Text="43" TextChanged="TextParamChanged"/>
+                        <TextBox x:Name="TBN" Margin="20,0" Text="43" />
                         <Label Content="F(k):"/>
-                        <TextBox x:Name="TBFk" Margin="20,0" Height="45" Text="Sin(2*[Pi]*[f0]*([k]+1)*[dT])" TextChanged="TextParamChanged"/>
+                        <TextBox x:Name="TBFk" Margin="20,0" Height="45" Text="Sin(2*[Pi]*[f0]*([k]+1)*[dT])*100" />
                         <Label Content="Boundaries:"/>
                         <Grid Height="75">
-                            <TextBox Height="22" Width="60" x:Name="TBBoundTop" Margin="60,10,60,43" Text="1" TextChanged="TextParamChanged"/>
-                            <TextBox Height="22" Width="60" x:Name="TBBoundBot" Margin="65,37,65,16" Text="1" TextChanged="TextParamChanged"/>
-                            <TextBox Height="22" Width="60" x:Name="TBBoundLeft" Margin="0,26,130,27" Text="0" TextChanged="TextParamChanged"/>
-                            <TextBox Height="22" Width="60" x:Name="TBBoundRight" Margin="130,26,0,27" Text="0" TextChanged="TextParamChanged"/>
+                            <TextBox Height="22" Width="60" x:Name="TBBoundTop" Margin="60,10,60,43" Text="1" />
+                            <TextBox Height="22" Width="60" x:Name="TBBoundBot" Margin="65,37,65,16" Text="1" />
+                            <TextBox Height="22" Width="60" x:Name="TBBoundLeft" Margin="0,26,130,27" Text="0" />
+                            <TextBox Height="22" Width="60" x:Name="TBBoundRight" Margin="130,26,0,27" Text="0" />
                         </Grid>
-                        <Button x:Name="BTRun" Margin="20,5" Content="Run" Click="BTRun_Click"/>
+                        <WrapPanel HorizontalAlignment="Center">
+                            <Button Margin="4" x:Name="BTRecalcNet" Content="Calculate Net" Click="BTRecalcNet_Click_1"/>
+                            <Button Margin="4"  x:Name="BTRun" Content="Run Simulation" Click="BTRun_Click"/>
+                        </WrapPanel>
                     </StackPanel>
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>

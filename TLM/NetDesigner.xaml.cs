@@ -97,5 +97,12 @@ namespace TLM
             NodeInfo.Content = s;
         }
 
+        private void ChangeTool(object sender, RoutedEventArgs e)
+        {
+            var tools = new List<System.Windows.Controls.Primitives.ToggleButton> { ToggleInput, ToggleMaterial, ToggleTrack };
+            var thistool = ((System.Windows.Controls.Primitives.ToggleButton)sender);
+            tools.Where(t => t != thistool).ToList().ForEach(t => t.IsChecked = false);
+        }
+
     }
 }
