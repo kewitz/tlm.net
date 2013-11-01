@@ -22,11 +22,13 @@ namespace TLM.Objects
     {
         public TLM.Core.Node node;
         public Color color;
+        public bool Tracking;
 
         public Node(TLM.Core.Node n)
         {
             InitializeComponent();
             this.node = n;
+            this.Tracking = false;
             this.Redraw();
         }
 
@@ -35,6 +37,7 @@ namespace TLM.Objects
             this.color = Color.FromArgb(node.material.color.A, node.material.color.R, node.material.color.G, node.material.color.B);
             Dot.Stroke = new SolidColorBrush(color);
             Dot.Fill = this.node.input? new SolidColorBrush(color) : Brushes.Transparent;
+            IsTracked.Visibility = Tracking ? Visibility.Visible : Visibility.Hidden;
         }
 
 

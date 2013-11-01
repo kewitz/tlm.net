@@ -12,6 +12,7 @@
         </Grid.RowDefinitions>
         <ToolBar Grid.Row="0">
             <ComboBox Width="100" x:Name="MatList" SelectedIndex="0"/>
+            <ToolBarPanel x:Name="NetToolbar" Orientation="Horizontal">
             <ToggleButton x:Name="ToggleMaterial" Width="16" Height="16" ToolTip="Set Material">
                 <ToggleButton.Background>
                     <ImageBrush ImageSource="Resources/paint-brush.png" Stretch="None"/>
@@ -22,6 +23,12 @@
                     <ImageBrush ImageSource="Resources/plug.png" Stretch="None"/>
                 </ToggleButton.Background>
             </ToggleButton>
+            <ToggleButton x:Name="ToggleTrack" Width="16" Height="16" ToolTip="Toggle Tracking">
+                <ToggleButton.Background>
+                    <ImageBrush ImageSource="Resources/magnifier.png" Stretch="None"/>
+                </ToggleButton.Background>
+            </ToggleButton>
+            </ToolBarPanel>
         </ToolBar>
         <ScrollViewer Grid.Row="1"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#FF141414" >
                 <Canvas x:Name="DesignCanvas" Grid.Row="1" Background="#FF141414" Margin="2" RenderOptions.EdgeMode="Unspecified" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderTransformOrigin="0.5,0.5"/>

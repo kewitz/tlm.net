@@ -25,6 +25,17 @@ namespace TLM
         public Net WorkingNet { get; set; }
         public int Spacing = 10;
 
+        public List<Node> TrackingNodes
+        {
+            get
+            {
+                var a = from gnode in DesignCanvas.Children.OfType<Objects.Node>()
+                        where gnode.Tracking == true
+                        select gnode.node;
+                return a.ToList();
+            }
+        }
+
         public NetDesigner()
         {
             InitializeComponent();
@@ -39,10 +50,17 @@ namespace TLM
                 DesignCanvas.Children.Add(graphicNode);
                 graphicNode.Margin = new Thickness(n.j * Spacing, n.i * Spacing, 0, 0);
                 graphicNode.MouseEnter += graphicNode_MouseEnter;
+                graphicNode.MouseLeftButtonDown += graphicNode_MouseLeftButtonDown;
             }
 
             DesignCanvas.Width = WorkingNet.shape[0] * 10;
             DesignCanvas.Height = WorkingNet.shape[1] * 10;
+        }
+
+        void graphicNode_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Objects.Node s = (Objects.Node)sender;
+            BrushEvent(s);
         }
 
         void BrushEvent(Objects.Node s)
@@ -57,6 +75,10 @@ namespace TLM
             if (ToggleInput.IsChecked == true)
             {
                 s.node.input = !s.node.input;
+            }
+            if (ToggleTrack.IsChecked == true)
+            {
+                s.Tracking = !s.Tracking;
             }
             s.Redraw();
         }
