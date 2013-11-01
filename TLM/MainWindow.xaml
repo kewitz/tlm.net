@@ -20,7 +20,7 @@
                         <ColumnDefinition Width="200"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <StackPanel HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" >
+                    <StackPanel x:Name="ParamPanel" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" >
                         <Label Content="Size X:"/>
                         <TextBox x:Name="TBSizeX" Margin="20,0" Text="10E-2"/>
                         <Label Content="Size Y:"/>
@@ -28,9 +28,9 @@
                         <Label Content="Material:"/>
                         <ComboBox x:Name="CBMat" Margin="20,0" SelectedIndex="0"/>
                         <Label Content="Delta L:"/>
-                        <TextBox x:Name="TBdL" Margin="20,0" Text="1E-3"/>
+                        <TextBox x:Name="TBdL" Margin="20,0" Text="1E-3" />
                         <Label Content="Z0:"/>
-                        <TextBox x:Name="TBZ0" Margin="20,0" Text="377"/>
+                        <TextBox x:Name="TBZ0" Margin="20,0" Text="377" />
                         <Label Content="Freq:"/>
                         <TextBox x:Name="TBFreq" Margin="20,0" Text="10E9"/>
                         <Label Content="C:"/>
@@ -48,12 +48,11 @@
                             <TextBox Height="22" Width="60" x:Name="TBBoundLeft" Margin="0,26,130,27" Text="-0.17157"/>
                             <TextBox Height="22" Width="60" x:Name="TBBoundRight" Margin="130,26,0,27" Text="-0.17157"/>
                         </Grid>
-                        <Button x:Name="BTCreateNet" Click="BTCreateNet_Click" Margin="20,0" Content="Create Net"/>
                         <Button x:Name="BTRun" Margin="20,5" Content="Run" Click="BTRun_Click"/>
                     </StackPanel>
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="250"/>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
@@ -61,6 +60,9 @@
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
                         <DataGrid x:Name="DGMatList" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" CanUserResizeRows="False" EnableRowVirtualization="False"/>
+                        <WindowsFormsHost Margin="0,0,0,0" Grid.Column="1" Grid.Row="0">
+                            <Drawing:ILPanel x:Name="ilPanelTracker" Driver="GDI"/>
+                        </WindowsFormsHost>
                         <local:NetDesigner x:Name="Designer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="2"/>
                     </Grid>
                 </Grid>

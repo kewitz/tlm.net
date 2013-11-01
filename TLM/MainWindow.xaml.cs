@@ -29,13 +29,11 @@ namespace TLM
     {
         Thread solver;
         private Net net = new Net();
-        private ILScene scene;
         private ILPlotCube plot;
 
         public MainWindow()
         {
             InitializeComponent();
-
 
             CBMat.ItemsSource = net.matList.Where(mat => mat.Name != "");
             Designer.MatList.ItemsSource = net.matList.Where(mat => mat.Name != "");
@@ -43,7 +41,7 @@ namespace TLM
             DGMatList.ItemsSource = net.matList;
             DGMatList.RowEditEnding += DGMatList_RowEditEnding;
 
-            scene = new ILScene();
+            var scene = new ILScene();
             plot = new ILPlotCube(twoDMode: false);
             scene.Add(plot);
             var signal = ILMath.ones<float>(10, 10);
@@ -70,42 +68,41 @@ namespace TLM
             Designer.MatList.ItemsSource = net.matList.Where(mat => mat.Name != "");
         }
 
-
-        public void CreateNet()
-        {
-            net.x = Convert.ToDouble(TBSizeX.Text, System.Globalization.CultureInfo.InvariantCulture);
-            net.y = Convert.ToDouble(TBSizeY.Text, System.Globalization.CultureInfo.InvariantCulture);
-            net.material = CBMat.SelectedItem as Material;
-            net.dL = Convert.ToDouble(TBdL.Text, System.Globalization.CultureInfo.InvariantCulture);
-            net.Z0 = Convert.ToDouble(TBZ0.Text, System.Globalization.CultureInfo.InvariantCulture);
-            net.f0 = Convert.ToDouble(TBFreq.Text, System.Globalization.CultureInfo.InvariantCulture);
-            net.c = Convert.ToDouble(TBC.Text, System.Globalization.CultureInfo.InvariantCulture);
-            net.N = Convert.ToInt32(TBN.Text, System.Globalization.CultureInfo.InvariantCulture);
-            net.E0Init = Convert.ToDouble(TBE0.Text, System.Globalization.CultureInfo.InvariantCulture);
-            double bTop = Convert.ToDouble(TBBoundTop.Text, System.Globalization.CultureInfo.InvariantCulture);
-            double bLeft = Convert.ToDouble(TBBoundLeft.Text, System.Globalization.CultureInfo.InvariantCulture);
-            double bBot = Convert.ToDouble(TBBoundBot.Text, System.Globalization.CultureInfo.InvariantCulture);
-            double bRight = Convert.ToDouble(TBBoundRight.Text, System.Globalization.CultureInfo.InvariantCulture);
-            net.boundaries = new Boundaries(bTop, bBot, bLeft, bRight);           
-            net.Fk = TBFk.Text;
-            net.Calc();
-            TBdL.LostFocus += new RoutedEventHandler(TB_TextChanged);
-            TBZ0.LostFocus += new RoutedEventHandler(TB_TextChanged);
-            TBFreq.LostFocus += new RoutedEventHandler(TB_TextChanged);
-            TBC.LostFocus += new RoutedEventHandler(TB_TextChanged);
-            TBN.LostFocus += new RoutedEventHandler(TB_TextChanged);
-            TBE0.LostFocus += new RoutedEventHandler(TB_TextChanged);
-            TBBoundTop.LostFocus += new RoutedEventHandler(TB_TextChanged);
-            TBBoundLeft.LostFocus += new RoutedEventHandler(TB_TextChanged);
-            TBBoundBot.LostFocus += new RoutedEventHandler(TB_TextChanged);
-            TBBoundRight.LostFocus += new RoutedEventHandler(TB_TextChanged);
-        }
-
         private void BTCreateNet_Click(object sender, RoutedEventArgs e)
         {
-            CreateNet();
-            Designer.WorkingNet = this.net;
-            Designer.DrawNet();
+            try
+            {
+                net.x = Convert.ToDouble(TBSizeX.Text, System.Globalization.CultureInfo.InvariantCulture);
+                net.y = Convert.ToDouble(TBSizeY.Text, System.Globalization.CultureInfo.InvariantCulture);
+                net.material = CBMat.SelectedItem as Material;
+                net.dL = Convert.ToDouble(TBdL.Text, System.Globalization.CultureInfo.InvariantCulture);
+                net.Z0 = Convert.ToDouble(TBZ0.Text, System.Globalization.CultureInfo.InvariantCulture);
+                net.f0 = Convert.ToDouble(TBFreq.Text, System.Globalization.CultureInfo.InvariantCulture);
+                net.c = Convert.ToDouble(TBC.Text, System.Globalization.CultureInfo.InvariantCulture);
+                net.N = Convert.ToInt32(TBN.Text, System.Globalization.CultureInfo.InvariantCulture);
+                double bTop = Convert.ToDouble(TBBoundTop.Text, System.Globalization.CultureInfo.InvariantCulture);
+                double bLeft = Convert.ToDouble(TBBoundLeft.Text, System.Globalization.CultureInfo.InvariantCulture);
+                double bBot = Convert.ToDouble(TBBoundBot.Text, System.Globalization.CultureInfo.InvariantCulture);
+                double bRight = Convert.ToDouble(TBBoundRight.Text, System.Globalization.CultureInfo.InvariantCulture);
+                net.boundaries = new Boundaries(bTop, bBot, bLeft, bRight);
+                net.Fk = TBFk.Text;
+                net.Calc();
+
+                TBdL.LostFocus += new RoutedEventHandler(TB_TextChanged);
+                TBZ0.LostFocus += new RoutedEventHandler(TB_TextChanged);
+                TBFreq.LostFocus += new RoutedEventHandler(TB_TextChanged);
+                TBC.LostFocus += new RoutedEventHandler(TB_TextChanged);
+                TBN.LostFocus += new RoutedEventHandler(TB_TextChanged);
+                TBE0.LostFocus += new RoutedEventHandler(TB_TextChanged);
+                TBBoundTop.LostFocus += new RoutedEventHandler(TB_TextChanged);
+                TBBoundLeft.LostFocus += new RoutedEventHandler(TB_TextChanged);
+                TBBoundBot.LostFocus += new RoutedEventHandler(TB_TextChanged);
+                TBBoundRight.LostFocus += new RoutedEventHandler(TB_TextChanged);
+            }
+            catch
+            {
+            }
+
         }
 
         private void BTRun_Click(object sender, RoutedEventArgs e)
@@ -144,7 +141,6 @@ namespace TLM
         }
 
 
-
         private void UpdateRunParameters()
         {
             net.dL = Convert.ToDouble(TBdL.Text, System.Globalization.CultureInfo.InvariantCulture);
@@ -170,5 +166,25 @@ namespace TLM
             }
         }
        
+        //private void TextParamChanged(object sender, TextChangedEventArgs e)
+        //{
+        //    if (this.IsInitialized)
+        //    {
+        //        CreateNet();
+        //        Designer.WorkingNet = this.net;
+        //        Designer.DrawNet();
+        //    }
+        //}
+
+        //private void ComboParamChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    if (this.IsInitialized)
+        //    {
+        //        CreateNet();
+        //        Designer.WorkingNet = this.net;
+        //        Designer.DrawNet();
+        //    }
+        //}
+
     }
 }

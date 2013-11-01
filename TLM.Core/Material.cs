@@ -16,12 +16,13 @@ namespace TLM.Core
         public System.Drawing.Color color { get; set; }
 
         public Material() { }
-        public Material(string name, double er, double sigma)
+        public Material(string name, double er, double sigma) : this(name, er, sigma, Color.White) { }
+        public Material(string name, double er, double sigma, Color color)
         {
             this.Name = name;
             this.Er = er;
             this.Sigma = sigma;
-            this.color = Color.White;
+            this.color = color;
         }
 
         public override string ToString()
