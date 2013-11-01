@@ -37,6 +37,8 @@
                         <TextBox x:Name="TBC" Margin="20,0" Text="300E6"/>
                         <Label Content="N:"/>
                         <TextBox x:Name="TBN" Margin="20,0" Text="43"/>
+                        <Label Content="E0:"/>
+                        <TextBox x:Name="TBE0" Margin="20,0" Text="100"/>
                         <Label Content="F(k):"/>
                         <TextBox x:Name="TBFk" Margin="20,0" Height="45" Text="Sin(2*[Pi]*[f0]*([k]+1)*[dT])"/>
                         <Label Content="Boundaries:"/>
@@ -69,7 +71,7 @@
                         <RowDefinition Height="24"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <Slider x:Name="ResultSeeker" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0"/>
+                    <Slider x:Name="ResultSeeker" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0" ToolTip="Iterarion (N):0 - Periods (T):0"/>
                     <WindowsFormsHost Margin="0,0,0,0" Grid.Row="1" >
                         <Drawing:ILPanel x:Name="ilPanel" Driver="GDI"/>
                     </WindowsFormsHost>

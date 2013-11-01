@@ -52,6 +52,9 @@ namespace TLM
             if (ToggleMaterial.IsChecked == true)
             {
                 s.node.material = s.node.material == WorkingNet.material ? (Material)MatList.SelectedValue : WorkingNet.material;
+                s.node.Gs = (s.node.material.Sigma * s.node.dL) / s.node.Ylt;
+                s.node.Ys = 4 * (s.node.material.Er - 1);
+                s.node.Y = 4 + s.node.Ys + s.node.Gs;
             }
             //Seta Input
             if (ToggleInput.IsChecked == true)

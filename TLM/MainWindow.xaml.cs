@@ -81,13 +81,24 @@ namespace TLM
             net.f0 = Convert.ToDouble(TBFreq.Text, System.Globalization.CultureInfo.InvariantCulture);
             net.c = Convert.ToDouble(TBC.Text, System.Globalization.CultureInfo.InvariantCulture);
             net.N = Convert.ToInt32(TBN.Text, System.Globalization.CultureInfo.InvariantCulture);
+            net.E0Init = Convert.ToDouble(TBE0.Text, System.Globalization.CultureInfo.InvariantCulture);
             double bTop = Convert.ToDouble(TBBoundTop.Text, System.Globalization.CultureInfo.InvariantCulture);
             double bLeft = Convert.ToDouble(TBBoundLeft.Text, System.Globalization.CultureInfo.InvariantCulture);
             double bBot = Convert.ToDouble(TBBoundBot.Text, System.Globalization.CultureInfo.InvariantCulture);
             double bRight = Convert.ToDouble(TBBoundRight.Text, System.Globalization.CultureInfo.InvariantCulture);
-            net.boundaries = new Boundaries(bTop, bBot, bLeft, bRight);
+            net.boundaries = new Boundaries(bTop, bBot, bLeft, bRight);           
             net.Fk = TBFk.Text;
             net.Calc();
+            TBdL.LostFocus += new RoutedEventHandler(TB_TextChanged);
+            TBZ0.LostFocus += new RoutedEventHandler(TB_TextChanged);
+            TBFreq.LostFocus += new RoutedEventHandler(TB_TextChanged);
+            TBC.LostFocus += new RoutedEventHandler(TB_TextChanged);
+            TBN.LostFocus += new RoutedEventHandler(TB_TextChanged);
+            TBE0.LostFocus += new RoutedEventHandler(TB_TextChanged);
+            TBBoundTop.LostFocus += new RoutedEventHandler(TB_TextChanged);
+            TBBoundLeft.LostFocus += new RoutedEventHandler(TB_TextChanged);
+            TBBoundBot.LostFocus += new RoutedEventHandler(TB_TextChanged);
+            TBBoundRight.LostFocus += new RoutedEventHandler(TB_TextChanged);
         }
 
         private void BTCreateNet_Click(object sender, RoutedEventArgs e)
@@ -116,6 +127,9 @@ namespace TLM
                            select node.GetEz(iteration)).ToArray();
             var values = ILMath.tosingle((ILArray<double>)dvalues);
             values = ILMath.reshape(values, new int[] { net.shape[0], net.shape[1] });
+            //double p = net.f0*net.dT*iteration;
+            //int period = Convert.ToInt32(Math.Round(p));            
+            //ResultSeeker.ToolTip = string.Format("Iteration (N):{0}  -  Periods (T): {1}", iteration, period);
 
             plot.Children.Clear();
             var signal = ILMath.ones<float>(10, 10);
@@ -129,5 +143,32 @@ namespace TLM
             ilPanel.Refresh();
         }
 
+
+
+        private void UpdateRunParameters()
+        {
+            net.dL = Convert.ToDouble(TBdL.Text, System.Globalization.CultureInfo.InvariantCulture);
+            net.Z0 = Convert.ToDouble(TBZ0.Text, System.Globalization.CultureInfo.InvariantCulture);
+            net.f0 = Convert.ToDouble(TBFreq.Text, System.Globalization.CultureInfo.InvariantCulture);
+            net.c = Convert.ToDouble(TBC.Text, System.Globalization.CultureInfo.InvariantCulture);
+            net.N = Convert.ToInt32(TBN.Text, System.Globalization.CultureInfo.InvariantCulture);
+            net.E0Init = Convert.ToDouble(TBE0.Text, System.Globalization.CultureInfo.InvariantCulture);
+            double bTop = Convert.ToDouble(TBBoundTop.Text, System.Globalization.CultureInfo.InvariantCulture);
+            double bLeft = Convert.ToDouble(TBBoundLeft.Text, System.Globalization.CultureInfo.InvariantCulture);
+            double bBot = Convert.ToDouble(TBBoundBot.Text, System.Globalization.CultureInfo.InvariantCulture);
+            double bRight = Convert.ToDouble(TBBoundRight.Text, System.Globalization.CultureInfo.InvariantCulture);
+            net.boundaries = new Boundaries(bTop, bBot, bLeft, bRight);
+            net.Fk = TBFk.Text;
+            net.Calc();
+        }
+
+        private void TB_TextChanged(object sender, RoutedEventArgs e)
+        {
+            if (sender != null)
+            {
+                UpdateRunParameters();
+            }
+        }
+       
     }
 }

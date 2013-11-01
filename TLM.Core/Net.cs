@@ -15,7 +15,7 @@ namespace TLM.Core
         public event EventHandler<string> StatusUpdate;
         public event EventHandler CalcDone;
 
-        public double dL, Ylt, c, f0, x, y, Z0, lambda0, tal0, tc, dT, Vlt, Zlt;
+        public double dL, Ylt, c, f0, x, y, Z0, lambda0, tal0, tc, dT, Vlt, Zlt, E0Init;
         public int N;
         public int[] shape;
         public List<Node> Nodes = new List<Node>();
@@ -98,10 +98,10 @@ namespace TLM.Core
 
         public void Transmit(Node node, int k)
         {
-            node.Vi.P1[k] = node.j < shape[0] - 1 ? GetNode(node.i, node.j + 1).Vr.P3[k - 1] : this.boundaries.Bottom * node.Vr.P1[k - 1];
-            node.Vi.P2[k] = node.i > 0 ? GetNode(node.i - 1, node.j).Vr.P4[k - 1] : this.boundaries.Left * node.Vr.P2[k - 1];
-            node.Vi.P3[k] = node.j > 0 ? GetNode(node.i, node.j - 1).Vr.P1[k - 1] : this.boundaries.Top * node.Vr.P3[k - 1];
-            node.Vi.P4[k] = node.i < shape[1] - 1 ? GetNode(node.i + 1, node.j).Vr.P2[k - 1] : this.boundaries.Right * node.Vr.P4[k - 1];
+            node.Vi.P1[k] = node.j < shape[0] - 1 ? GetNode(node.i, node.j + 1).Vr.P3[k - 1] : this.boundaries.Right * node.Vr.P1[k - 1];
+            node.Vi.P2[k] = node.i > 0 ? GetNode(node.i - 1, node.j).Vr.P4[k - 1] : this.boundaries.Bottom * node.Vr.P2[k - 1];
+            node.Vi.P3[k] = node.j > 0 ? GetNode(node.i, node.j - 1).Vr.P1[k - 1] : this.boundaries.Left * node.Vr.P3[k - 1];
+            node.Vi.P4[k] = node.i < shape[1] - 1 ? GetNode(node.i + 1, node.j).Vr.P2[k - 1] : this.boundaries.Top * node.Vr.P4[k - 1];
             node.Vi.P5[k] = node.Vr.P5[k - 1];
         }
 
@@ -121,7 +121,7 @@ namespace TLM.Core
                                   select node).ToList();
 
                 var value = (double)exc.Evaluate();
-                Parallel.ForEach(inputNodes, n => n.SetEz(k, value));
+                Parallel.ForEach(inputNodes, n => n.SetEz(k, value * this.E0Init));
 
                 //Solve Scatter
                 var needSolve = (from node in Nodes
