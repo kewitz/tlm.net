@@ -21,6 +21,8 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel x:Name="ParamPanel" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" >
+                        <Label Content="Irrad. Mode:"/>
+                        <ComboBox x:Name="CBMode" SelectedIndex="0" Margin="20,0"/>
                         <Label Content="Size X:"/>
                         <TextBox x:Name="TBSizeX" Margin="20,0" Text="10E-2" />
                         <Label Content="Size Y:"/>
@@ -36,7 +38,7 @@
                         <Label Content="C:"/>
                         <TextBox x:Name="TBC" Margin="20,0" Text="300E6" />
                         <Label Content="N:"/>
-                        <TextBox x:Name="TBN" Margin="20,0" Text="43" />
+                        <TextBox x:Name="TBN" Margin="20,0" Text="43" />                        
                         <Label Content="F(k):"/>
                         <TextBox x:Name="TBFk" Margin="20,0" Height="45" Text="Sin(2*[Pi]*[f0]*([k]+1)*[dT])*100" />
                         <Label Content="Boundaries:"/>
@@ -68,7 +70,7 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="PlotEz">
+            <TabItem x:Name="TBIEz" Header="PlotEz" IsEnabled="False">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="24"/>
@@ -80,7 +82,7 @@
                     </WindowsFormsHost>
                 </Grid>
             </TabItem>
-            <TabItem Header="PlotHx">
+            <TabItem x:Name="TBIHx" Header="PlotHx" IsEnabled="False">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="24"/>
@@ -92,7 +94,7 @@
                     </WindowsFormsHost>
                 </Grid>
             </TabItem>
-            <TabItem Header="PlotHy">
+            <TabItem x:Name="TBIHy" Header="PlotHy" IsEnabled="False">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="24"/>
@@ -101,6 +103,42 @@
                     <Slider x:Name="ResultSeekerHy" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0" ToolTip="Iteration(k):0 - Period(T):0"/>
                     <WindowsFormsHost Margin="0,0,0,0" Grid.Row="1" >
                         <Drawing:ILPanel x:Name="ilPanelHy" Driver="OpenGL"/>
+                    </WindowsFormsHost>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="TBIHz" Header="PlotHz" IsEnabled="False">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Slider x:Name="ResultSeekerHz" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0" ToolTip="Iteration(k):0 - Period(T):0"/>
+                    <WindowsFormsHost Margin="0,0,0,0" Grid.Row="1" >
+                        <Drawing:ILPanel x:Name="ilPanelHz" Driver="OpenGL"/>
+                    </WindowsFormsHost>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="TBIEx" Header="PlotEx" IsEnabled="False">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Slider x:Name="ResultSeekerEx" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0" ToolTip="Iteration(k):0 - Period(T):0"/>
+                    <WindowsFormsHost Margin="0,0,0,0" Grid.Row="1" >
+                        <Drawing:ILPanel x:Name="ilPanelEx" Driver="OpenGL"/>
+                    </WindowsFormsHost>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="TBIEy" Header="PlotEy" IsEnabled="False">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Slider x:Name="ResultSeekerEy" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0" ToolTip="Iteration(k):0 - Period(T):0"/>
+                    <WindowsFormsHost Margin="0,0,0,0" Grid.Row="1" >
+                        <Drawing:ILPanel x:Name="ilPanelEy" Driver="OpenGL"/>
                     </WindowsFormsHost>
                 </Grid>
             </TabItem>

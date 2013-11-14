@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using NCalc;
 using TLM.Core;
 using ILNumerics;
 using ILNumerics.Drawing;
@@ -29,7 +29,8 @@ namespace TLM
     {
         Thread solver;
         private Net net = new Net();
-        private ILPlotCube plot, plotHx, plotHy;
+        private ILPlotCube plot, plotHx, plotHy, plotHz, plotEx, plotEy;
+        private float maxVEz, maxVHx, maxVHy, maxVHz, maxVEx, maxVEy;
 
         public MainWindow()
         {
@@ -37,6 +38,9 @@ namespace TLM
 
             CBMat.ItemsSource = net.matList.Where(mat => mat.Name != "");
             Designer.MatList.ItemsSource = net.matList.Where(mat => mat.Name != "");
+
+            CBMode.Items.Add("Paralelo");
+            CBMode.Items.Add("Série");
 
             DGMatList.ItemsSource = net.matList;
             DGMatList.RowEditEnding += DGMatList_RowEditEnding;
@@ -48,16 +52,17 @@ namespace TLM
             ILSurface surf = new ILSurface(signal)
             {
                 Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
-                Colormap = Colormaps.Jet,                
+                Colormap = Colormaps.Jet,                    
+    
             };
             plot.AllowPan = false;
             plot.AllowZoom = false;                       
             plot.Projection = Projection.Orthographic;
             plot.Position = new Vector3(1, 3, .5);
-            plot.AllowRotation = false;            
-            plot.Add(surf);
+            plot.AllowRotation = false;                
+            plot.Add(surf);            
             scene.First<ILPlotCube>().AspectRatioMode = AspectRatioMode.MaintainRatios;
-            scene.First<ILPlotCube>().Rotation = Matrix4.Rotation(new Vector3(0.1, 0, 0), ILMath.pi / 2);
+            scene.First<ILPlotCube>().Rotation = Matrix4.Rotation(new Vector3(0.1, 0, 0), ILMath.pi / 2);                       
             ilPanel.Scene.Add(scene);
 
             ResultSeeker.ValueChanged += ResultSeeker_ValueChanged;
@@ -99,15 +104,79 @@ namespace TLM
             plotHy.AllowRotation = false;
             plotHy.Add(surfHy);
             sceneHy.First<ILPlotCube>().AspectRatioMode = AspectRatioMode.MaintainRatios;
-            sceneHy.First<ILPlotCube>().Rotation = Matrix4.Rotation(new Vector3(0.1, 0, 0), ILMath.pi / 2);
+            sceneHy.First<ILPlotCube>().Rotation = Matrix4.Rotation(new Vector3(0.1, 0, 0), ILMath.pi / 2);            
             ilPanelHy.Scene.Add(sceneHy);
 
             ResultSeekerHy.ValueChanged += ResultSeekerHy_ValueChanged;
+
+            var sceneHz = new ILScene();
+            plotHz = new ILPlotCube(twoDMode: false);
+            sceneHz.Add(plotHz);
+            var signalHz = ILMath.ones<float>(10, 10);
+            ILSurface surfHz = new ILSurface(signalHz)
+            {
+                Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
+                Colormap = Colormaps.Jet,
+
+            };
+            plotHz.AllowPan = false;
+            plotHz.AllowZoom = false;
+            plotHz.Projection = Projection.Orthographic;
+            plotHz.Position = new Vector3(1, 3, .5);
+            plotHz.AllowRotation = false;
+            plotHz.Add(surfHz);
+            sceneHz.First<ILPlotCube>().AspectRatioMode = AspectRatioMode.MaintainRatios;
+            sceneHz.First<ILPlotCube>().Rotation = Matrix4.Rotation(new Vector3(0.1, 0, 0), ILMath.pi / 2);
+            ilPanelHz.Scene.Add(sceneHz);
+
+            ResultSeekerHz.ValueChanged += ResultSeekerHz_ValueChanged;
+
+            var sceneEx = new ILScene();
+            plotEx = new ILPlotCube(twoDMode: false);
+            sceneEx.Add(plotEx);
+            var signalEx = ILMath.ones<float>(10, 10);
+            ILSurface surfEx = new ILSurface(signalEx)
+            {
+                Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
+                Colormap = Colormaps.Jet,
+            };
+            plotEx.AllowPan = false;
+            plotEx.AllowZoom = false;
+            plotEx.Projection = Projection.Orthographic;
+            plotEx.Position = new Vector3(1, 3, .5);
+            plotEx.AllowRotation = false;
+            plotEx.Add(surfEx);
+            sceneEx.First<ILPlotCube>().AspectRatioMode = AspectRatioMode.MaintainRatios;
+            sceneEx.First<ILPlotCube>().Rotation = Matrix4.Rotation(new Vector3(0.1, 0, 0), ILMath.pi / 2);
+            ilPanelEx.Scene.Add(sceneEx);
+
+            ResultSeekerEx.ValueChanged += ResultSeekerEx_ValueChanged;
+
+            var sceneEy = new ILScene();
+            plotEy = new ILPlotCube(twoDMode: false);
+            sceneEy.Add(plotEy);
+            var signalEy = ILMath.ones<float>(10, 10);
+            ILSurface surfEy = new ILSurface(signalEy)
+            {
+                Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
+                Colormap = Colormaps.Jet,
+            };
+            plotEy.AllowPan = false;
+            plotEy.AllowZoom = false;
+            plotEy.Projection = Projection.Orthographic;
+            plotEy.Position = new Vector3(1, 3, .5);
+            plotEy.AllowRotation = false;
+            plotEy.Add(surfEy);
+            sceneHy.First<ILPlotCube>().AspectRatioMode = AspectRatioMode.MaintainRatios;
+            sceneHy.First<ILPlotCube>().Rotation = Matrix4.Rotation(new Vector3(0.1, 0, 0), ILMath.pi / 2);
+            ilPanelEy.Scene.Add(sceneEy);
+
+            ResultSeekerEy.ValueChanged += ResultSeekerEy_ValueChanged;
         }
 
         void ResultSeeker_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            UpdatePlot(Convert.ToInt32(ResultSeeker.Value));
+            UpdatePlot(Convert.ToInt32(ResultSeeker.Value));            
         }
 
         void ResultSeekerHx_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -118,6 +187,21 @@ namespace TLM
         void ResultSeekerHy_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             UpdatePlotHy(Convert.ToInt32(ResultSeekerHy.Value));
+        }
+
+        void ResultSeekerHz_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            UpdatePlotHz(Convert.ToInt32(ResultSeekerHz.Value));
+        }
+
+        void ResultSeekerEx_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            UpdatePlotEx(Convert.ToInt32(ResultSeekerEx.Value));
+        }
+
+        void ResultSeekerEy_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            UpdatePlotEy(Convert.ToInt32(ResultSeekerEy.Value));
         }
 
         void DGMatList_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
@@ -145,7 +229,8 @@ namespace TLM
                 double bRight = Convert.ToDouble(TBBoundRight.Text, System.Globalization.CultureInfo.InvariantCulture);
                 net.boundaries = new Boundaries(bTop, bBot, bLeft, bRight);
                 net.Fk = TBFk.Text;
-                net.Calc();
+                net.mode = CBMode.SelectedIndex;
+                net.Calc(CBMode.SelectedIndex);
             }
             catch
             {
@@ -159,12 +244,31 @@ namespace TLM
             solver.Start();
             solver.Join();
             StatusInfo.Text = "Simulation done.";
-            ResultSeeker.Maximum = net.N - 1;
-            ResultSeeker.Value = 0;
-            ResultSeekerHx.Maximum = net.N - 1;
-            ResultSeekerHx.Value = 0;
-            ResultSeekerHy.Maximum = net.N - 1;
-            ResultSeekerHy.Value = 0;
+            if (CBMode.SelectedIndex == 0)
+            {
+                TBIEz.IsEnabled = true;
+                TBIHx.IsEnabled = true;
+                TBIHy.IsEnabled = true;
+                ResultSeeker.Maximum = net.N - 1;
+                ResultSeeker.Value = 0;
+                ResultSeekerHx.Maximum = net.N - 1;
+                ResultSeekerHx.Value = 0;
+                ResultSeekerHy.Maximum = net.N - 1;
+                ResultSeekerHy.Value = 0; 
+            }
+            else
+            {
+                TBIHz.IsEnabled = true;
+                TBIEx.IsEnabled = true;
+                TBIEy.IsEnabled = true;
+                ResultSeekerHz.Maximum = net.N - 1;
+                ResultSeekerHz.Value = 0;
+                ResultSeekerEx.Maximum = net.N - 1;
+                ResultSeekerEx.Value = 0;
+                ResultSeekerEy.Maximum = net.N - 1;
+                ResultSeekerEy.Value = 0; 
+            }
+                    
         }
 
         private void UpdatePlot(int iteration)
@@ -177,16 +281,20 @@ namespace TLM
             values = ILMath.reshape(values, new int[] { net.shape[0], net.shape[1] });
             double time = iteration * net.dT * 1E10;
             int T = Convert.ToInt32(Math.Floor(time));
-            float maxV = Convert.ToSingle(Math.Round(dvalues.Max(),2));
-            ResultSeeker.ToolTip = string.Format("Iteration(k):{0} - Period(T):{1} - Max. Value:{2}", iteration, T, maxV);
+            maxVEz = (maxVEz < Convert.ToSingle(Math.Round(dvalues.Max(), 2))) ? Convert.ToSingle(Math.Round(dvalues.Max(), 2)) :
+                                                                                maxVEz;
+            ResultSeeker.ToolTip = string.Format("Iteration(k):{0} - Period(T):{1} - Max. Value:{2}", iteration, T, maxVEz);
             plot.Children.Clear();
             var signal = ILMath.ones<float>(10, 10);
             ILSurface surf = new ILSurface(values)
             {
                 Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
                 Colormap = Colormaps.Jet,
-            };                        
+                
+            };            
             plot.Add(surf);
+            plot.Limits.Set(new Vector3(0, 0, -maxVEz),
+                                new Vector3(net.shape[1], net.shape[0], maxVEz));             
             ilPanel.Refresh();
         }
 
@@ -200,8 +308,9 @@ namespace TLM
             values = ILMath.reshape(values, new int[] { net.shape[0], net.shape[1] });
             double time = iteration * net.dT * 1E10;
             int T = Convert.ToInt32(Math.Floor(time));
-            float maxV = Convert.ToSingle(Math.Round(dvalues.Max(), 2));
-            ResultSeekerHx.ToolTip = string.Format("Iteration(k):{0} - Period(T):{1} - Max. Value:{2}", iteration, T, maxV);
+            maxVHx = (maxVHx < Convert.ToSingle(Math.Round(dvalues.Max(), 2))) ? Convert.ToSingle(Math.Round(dvalues.Max(), 2)) :
+                                                                                maxVHx;
+            ResultSeekerHx.ToolTip = string.Format("Iteration(k):{0} - Period(T):{1} - Max. Value:{2}", iteration, T, maxVHx);
             plotHx.Children.Clear();
             var signal = ILMath.ones<float>(10, 10);
             ILSurface surf = new ILSurface(values)
@@ -210,6 +319,8 @@ namespace TLM
                 Colormap = Colormaps.Jet,
             };            
             plotHx.Add(surf);
+            plotHx.Limits.Set(new Vector3(0, 0, -maxVHx),
+                                new Vector3(net.shape[1], net.shape[0], maxVHx)); 
             ilPanelHx.Refresh();
         }
 
@@ -223,8 +334,9 @@ namespace TLM
             values = ILMath.reshape(values, new int[] { net.shape[0], net.shape[1] });
             double time = iteration * net.dT * 1E10;
             int T = Convert.ToInt32(Math.Floor(time));
-            float maxV = Convert.ToSingle(Math.Round(dvalues.Max(), 2));
-            ResultSeekerHy.ToolTip = string.Format("Iteration(k):{0} - Period(T):{1} - Max. Value:{2}", iteration, T, maxV);            
+            maxVHy = (maxVHy < Convert.ToSingle(Math.Round(dvalues.Max(), 2))) ? Convert.ToSingle(Math.Round(dvalues.Max(), 2)) :
+                                                                                maxVHy;
+            ResultSeekerHy.ToolTip = string.Format("Iteration(k):{0} - Period(T):{1} - Max. Value:{2}", iteration, T, maxVHy);            
             plotHy.Children.Clear();
             var signal = ILMath.ones<float>(10, 10);
             ILSurface surf = new ILSurface(values)
@@ -233,7 +345,88 @@ namespace TLM
                 Colormap = Colormaps.Jet,
             };                      
             plotHy.Add(surf);
+            plotHy.Limits.Set(new Vector3(0, 0, -maxVHy),
+                                new Vector3(net.shape[1], net.shape[0], maxVHy)); 
             ilPanelHy.Refresh();
+        }
+
+        private void UpdatePlotHz(int iteration)
+        {
+            var dvalues = (from node in net.Nodes
+                           orderby node.j ascending
+                           orderby node.i ascending
+                           select node.GetHz(iteration)).ToArray();
+            var values = ILMath.tosingle((ILArray<double>)dvalues);
+            values = ILMath.reshape(values, new int[] { net.shape[0], net.shape[1] });
+            double time = iteration * net.dT * 1E10;
+            int T = Convert.ToInt32(Math.Floor(time));
+            maxVHz = (maxVHz < Convert.ToSingle(Math.Round(dvalues.Max(), 2))) ? Convert.ToSingle(Math.Round(dvalues.Max(), 2)) :
+                                                                                maxVHz;
+            ResultSeekerHz.ToolTip = string.Format("Iteration(k):{0} - Period(T):{1} - Max. Value:{2}", iteration, T, maxVHz);
+            plotHz.Children.Clear();
+            var signal = ILMath.ones<float>(10, 10);
+            ILSurface surf = new ILSurface(values)
+            {
+                Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
+                Colormap = Colormaps.Jet,
+
+            };
+            plotHz.Add(surf);
+            plotHz.Limits.Set(new Vector3(0, 0, -maxVHz),
+                                new Vector3(net.shape[1], net.shape[0], maxVHz));
+            ilPanelHz.Refresh();
+        }
+
+        private void UpdatePlotEx(int iteration)
+        {
+            var dvalues = (from node in net.Nodes
+                           orderby node.j ascending
+                           orderby node.i ascending
+                           select (node.GetEx(node, iteration))).ToArray();
+            var values = ILMath.tosingle((ILArray<double>)dvalues);
+            values = ILMath.reshape(values, new int[] { net.shape[0], net.shape[1] });
+            double time = iteration * net.dT * 1E10;
+            int T = Convert.ToInt32(Math.Floor(time));
+            maxVEx = (maxVEx < Convert.ToSingle(Math.Round(dvalues.Max(), 2))) ? Convert.ToSingle(Math.Round(dvalues.Max(), 2)) :
+                                                                                maxVEx;
+            ResultSeekerEx.ToolTip = string.Format("Iteration(k):{0} - Period(T):{1} - Max. Value:{2}", iteration, T, maxVEx);
+            plotEx.Children.Clear();
+            var signal = ILMath.ones<float>(10, 10);
+            ILSurface surf = new ILSurface(values)
+            {
+                Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
+                Colormap = Colormaps.Jet,
+            };
+            plotEx.Add(surf);
+            plotEx.Limits.Set(new Vector3(0, 0, -maxVEx),
+                                new Vector3(net.shape[1], net.shape[0], maxVEx));
+            ilPanelEx.Refresh();
+        }
+
+        private void UpdatePlotEy(int iteration)
+        {
+            var dvalues = (from node in net.Nodes
+                           orderby node.j ascending
+                           orderby node.i ascending
+                           select (node.GetEy(node, iteration))).ToArray();
+            var values = ILMath.tosingle((ILArray<double>)dvalues);
+            values = ILMath.reshape(values, new int[] { net.shape[0], net.shape[1] });
+            double time = iteration * net.dT * 1E10;
+            int T = Convert.ToInt32(Math.Floor(time));
+            maxVEy = (maxVEy < Convert.ToSingle(Math.Round(dvalues.Max(), 2))) ? Convert.ToSingle(Math.Round(dvalues.Max(), 2)) :
+                                                                                maxVEy;
+            ResultSeekerEy.ToolTip = string.Format("Iteration(k):{0} - Period(T):{1} - Max. Value:{2}", iteration, T, maxVEy);
+            plotEy.Children.Clear();
+            var signal = ILMath.ones<float>(10, 10);
+            ILSurface surf = new ILSurface(values)
+            {
+                Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
+                Colormap = Colormaps.Jet,
+            };
+            plotEy.Add(surf);
+            plotEy.Limits.Set(new Vector3(0, 0, -maxVEy),
+                                new Vector3(net.shape[1], net.shape[0], maxVEy));
+            ilPanelEy.Refresh();
         }
 
         private void BTRecalcNet_Click_1(object sender, RoutedEventArgs e)
@@ -242,6 +435,5 @@ namespace TLM
             Designer.WorkingNet = this.net;
             Designer.DrawNet();
         }
-
     }
 }
