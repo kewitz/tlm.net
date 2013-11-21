@@ -19,6 +19,9 @@ using TLM.Core;
 using ILNumerics;
 using ILNumerics.Drawing;
 using ILNumerics.Drawing.Plotting;
+using Microsoft.Win32;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace TLM
 {
@@ -151,6 +154,29 @@ namespace TLM
             {
             }
         }
+        public void UpdateUI()
+        {
+            TBSizeX.Text = net.x.ToString();
+            TBSizeY.Text = net.y.ToString();
+            CBMat.SelectedItem = net.material;
+            TBdL.Text = net.dL.ToString();
+            TBZ0.Text = net.Z0.ToString();
+            TBFreq.Text = net.f0.ToString();
+            TBC.Text = net.c.ToString();
+            TBN.Text = net.N.ToString();
+            TBBoundBot.Text = net.boundaries.Bottom.ToString();
+            TBBoundLeft.Text = net.boundaries.Left.ToString();
+            TBBoundRight.Text = net.boundaries.Right.ToString();
+            TBBoundTop.Text = net.boundaries.Top.ToString();
+            TBFk.Text = net.Fk.ToString();
+
+            CBMat.ItemsSource = net.matList.Where(mat => mat.Name != "");
+            Designer.MatList.ItemsSource = net.matList.Where(mat => mat.Name != "");
+
+            DGMatList.ItemsSource = net.matList;
+
+            Designer.DrawNet();
+        }
 
         private void BTRun_Click(object sender, RoutedEventArgs e)
         {
@@ -243,5 +269,47 @@ namespace TLM
             Designer.DrawNet();
         }
 
+        private void MenuSave(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "Arquivo de Simulação TLM|*.tlm";
+            saveFileDialog1.Title = "Salvar arquivo de Simulação TLM";
+            saveFileDialog1.ShowDialog();
+            if (saveFileDialog1.FileName != "")
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(Net));
+                TextWriter writer = new StreamWriter(saveFileDialog1.FileName);
+                serializer.Serialize(writer, this.net);
+                writer.Close();
+            }
+        }
+
+        private void MenuLoad(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog OpenDialog = new OpenFileDialog();
+            OpenDialog.Filter = "Arquivo de Simulação TLM|*.tlm";
+            OpenDialog.Title = "Abrir arquivo de Simulação TLM";
+            OpenDialog.ShowDialog();
+            if (OpenDialog.FileName != "" && File.Exists(OpenDialog.FileName))
+            {
+                FileStream fs = null;
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(Net));
+                    fs = new FileStream(OpenDialog.FileName, FileMode.Open);
+                    this.net = (Net)serializer.Deserialize(fs);
+                    Designer.WorkingNet = this.net;
+                    UpdateUI();
+                }
+                catch
+                {
+                    throw;
+                }
+                finally
+                {
+                    fs.Close();
+                }
+            }
+        }
     }
 }

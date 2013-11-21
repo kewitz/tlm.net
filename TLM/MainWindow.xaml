@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Drawing="clr-namespace:ILNumerics.Drawing;assembly=ILNumerics" xmlns:local="clr-namespace:TLM" x:Class="TLM.MainWindow"
-        Title="TLM.net" WindowStartupLocation="CenterScreen" WindowState="Maximized" Icon="Resources/sim.ico">
+        Title="TLM.net" WindowStartupLocation="CenterScreen" WindowState="Maximized" Icon="Resources/sim.ico" Height="695">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -10,7 +10,11 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Menu Grid.Row="0">
-            <MenuItem Header="File"/>
+            <MenuItem Header="File">
+                <MenuItem Header="Save" Click="MenuSave"/>
+                <MenuItem Header="Load" Click="MenuLoad"/>
+                <MenuItem Header="Exit"/>
+            </MenuItem>
             <MenuItem Header="Help"/>
         </Menu>
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1">
@@ -76,7 +80,7 @@
                     </Grid.RowDefinitions>
                     <Slider x:Name="ResultSeeker" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0" ToolTip="Iteration(k):0 - Period(T):0"/>
                     <WindowsFormsHost Margin="0,0,0,0" Grid.Row="1" >
-                        <Drawing:ILPanel x:Name="ilPanel" Driver="OpenGL"/>
+                        <Drawing:ILPanel x:Name="ilPanel" Driver="GDI"/>
                     </WindowsFormsHost>
                 </Grid>
             </TabItem>
@@ -88,7 +92,7 @@
                     </Grid.RowDefinitions>
                     <Slider x:Name="ResultSeekerHx" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0" ToolTip="Iteration(k):0 - Period(T):0"/>
                     <WindowsFormsHost Margin="0,0,0,0" Grid.Row="1" >
-                        <Drawing:ILPanel x:Name="ilPanelHx" Driver="OpenGL"/>
+                        <Drawing:ILPanel x:Name="ilPanelHx" Driver="GDI"/>
                     </WindowsFormsHost>
                 </Grid>
             </TabItem>
@@ -100,7 +104,7 @@
                     </Grid.RowDefinitions>
                     <Slider x:Name="ResultSeekerHy" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0" ToolTip="Iteration(k):0 - Period(T):0"/>
                     <WindowsFormsHost Margin="0,0,0,0" Grid.Row="1" >
-                        <Drawing:ILPanel x:Name="ilPanelHy" Driver="OpenGL"/>
+                        <Drawing:ILPanel x:Name="ilPanelHy" Driver="GDI"/>
                     </WindowsFormsHost>
                 </Grid>
             </TabItem>
