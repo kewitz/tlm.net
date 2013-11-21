@@ -12,8 +12,8 @@ namespace TLM.Core
     public class Node : ILNumerics.ILMath
     {
         private Material _material;
-        public double x, y, dL, Ylt, Gs, Ys, Y;
-        public int i, j;
+        public double x, y, dL, Ylt, Gs, Ys, Y, Zlt, Zs, Rs, Z;
+        public int i, j, mode;
         public bool input;
         public Material material
         {
@@ -24,32 +24,42 @@ namespace TLM.Core
             set
             {
                 this._material = value;
-                RecalcParams();
+                RecalcParams(mode);
             }
         }
         public Ports Vi, Vr;
 
         public Node() { }
-        public Node(int i, int j, Material mat, double dL, double Ylt, int N, bool input = false)
+        public Node(int i, int j, Material mat, double dL, double Ylt, int N, int mode, bool input = false)
         {
             this.i = i;
             this.j = j;
             this.material = mat;            
             this.dL = dL;
-            this.Ylt = Ylt;
+            if (mode == 0) { this.Ylt = Ylt; } else { this.Zlt = 1 / Ylt; }
             this.x = j * dL;
             this.y = i * dL;           
             this.Vi = new Ports(N);
             this.Vr = new Ports(N);
+            this.mode = mode;
             this.input = input;
-            RecalcParams();
-        }
+            RecalcParams(mode);
+        }       
 
-        public void RecalcParams()
+        public void RecalcParams(int mode)
         {
-            this.Gs = (material.Sigma * dL) / Ylt;
-            this.Ys = 4 * (material.Er - 1);
-            this.Y = 4 + Ys + Gs;
+            if (mode == 0)
+            {
+                this.Gs = (material.Sigma * dL) / Ylt;
+                this.Ys = 4 * (material.Er - 1);
+                this.Y = 4 + Ys + Gs;
+            }
+            else
+            {
+                this.Rs = (material.Sigma * dL) / Zlt;
+                this.Zs = 4 * (material.mur - 1);
+                this.Z = 4 + Zs + Rs;
+            }
         }
 
         public void ClearSimulation()
@@ -65,17 +75,32 @@ namespace TLM.Core
             this.Vi.P1[k] = this.Vi.P2[k] = this.Vi.P3[k] = this.Vi.P4[k] = vi;
         }
 
-        public void SolveScatter(int k)
+        public void SetHz(int k, double Hz)
+        {
+            double iz = Hz * this.dL;
+            double vi = (iz * (4 * this.Zlt) + this.Zs + this.Rs) / 2;
+            this.Vi.P1[k] = this.Vi.P2[k] = this.Vi.P3[k] = this.Vi.P4[k] = this.Vi.P5[k] = vi;
+        }
+
+        public void SolveScatter(int k, int mode)
         {
             //Scatter matrix.
-            ILArray<double> s = array<double>(
-                    new double[] { 
-                        2-this.Y, 2, 2, 2, 2*this.Ys,
-                        2, 2-this.Y, 2, 2, 2*this.Ys,
-                        2, 2, 2-this.Y, 2, 2*this.Ys,
-                        2, 2, 2, 2-this.Y, 2*this.Ys,
-                        2, 2, 2, 2, 2*this.Ys-this.Y
-                    }, 5, 5);
+            ILArray<double> s = (mode == 0) ? array<double>(
+                                                    new double[] { 
+                                                        2-this.Y, 2, 2, 2, 2*this.Ys,
+                                                        2, 2-this.Y, 2, 2, 2*this.Ys,
+                                                        2, 2, 2-this.Y, 2, 2*this.Ys,
+                                                        2, 2, 2, 2-this.Y, 2*this.Ys,
+                                                        2, 2, 2, 2, 2*this.Ys-this.Y
+                                                    }, 5, 5) : 
+                                              array<double>(
+                                                    new double[] { 
+                                                        this.Z-2,       2,          2,           -2,            -2,
+                                                        2,           this.Z-2,     -2,            2,             2,
+                                                        2,             -2,        this.Z-2,       2,             2,
+                                                        -2,             2,          2,          this.Z-2,       -2,
+                                                        -2 * this.Zs, 2 * this.Zs, 2 * this.Zs, -2 * this.Zs, this.Z - 2 * this.Zs
+                                                    }, 5, 5);
             //Input Voltage array.
             ILArray<double> vi = array<double>(
                     new double[] { 
@@ -86,7 +111,7 @@ namespace TLM.Core
                         this.Vi.P5[k],
                     }, 5);
             //Solved reflected voltage array.
-            ILArray<double> vr = (1 / this.Y) * ILMath.multiply(s, vi);
+            ILArray<double> vr = ((mode == 0) ? (1 / this.Y) : (1 / this.Z)) * ILMath.multiply(s, vi);
             this.Vr.P1[k] = vr.ElementAt(0);
             this.Vr.P2[k] = vr.ElementAt(1);
             this.Vr.P3[k] = vr.ElementAt(2);
@@ -101,11 +126,23 @@ namespace TLM.Core
                         (this.Vi.P3[k]) +
                         (this.Vi.P4[k])) *
                         this.Ylt) +
-                        (this.Vi.P4[k]) *
+                        (this.Vi.P5[k]) *
                         this.Ys)) / ((this.dL) *
                         ((4 * this.Ylt) +
                         this.Ys + this.Gs));
             return Ez;
+        }
+
+        public double GetHz(int k)
+        {
+            double Hz = (2 * ((this.Vi.P1[k]) -
+                        (this.Vi.P2[k]) -
+                        (this.Vi.P3[k]) +
+                        (this.Vi.P4[k]) +
+                        (this.Vi.P5[k]))) / ((this.dL) *
+                        ((4 * this.Zlt) +
+                        this.Zs + this.Rs));
+            return Hz;
         }
 
         public double GetHy(Node node, int k)
@@ -119,5 +156,19 @@ namespace TLM.Core
             double Hx = (node.Vi.P4[k] - node.Vi.P2[k]) / (dL * (1 / Ylt));
             return Hx;
         }
+        
+        public double GetEy(Node node, int k)
+        {
+            double Ey = -(node.Vi.P1[k] + node.Vi.P3[k]) / dL;
+            return Ey;
+        }
+        
+        public double GetEx(Node node, int k)
+        {
+            double Ex = -(node.Vi.P2[k] + node.Vi.P4[k]) / dL;
+            return Ex;
+        }
+
+       
     }
 }
