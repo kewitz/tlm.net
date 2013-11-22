@@ -28,7 +28,7 @@ namespace TLM.Core
         public double dT { get; set; }
         public double Vlt { get; set; }
         public double Zlt { get; set; }
-        public int N { get; set; }        
+        public int N { get; set; }
         public int[] shape { get; set; }
         public Boundaries boundaries { get; set; }
         public string Fk { get; set; }
@@ -85,7 +85,7 @@ namespace TLM.Core
             this.tal0 = this.lambda0 / this.c;
             this.tc = (5 * this.tal0) / 2;
             this.dT = this.dL / (sqrt2 * this.c);
-            this.Vlt = sqrt2 * this.c;            
+            this.Vlt = sqrt2 * this.c;
             this.Zlt = (mode == 0) ? sqrt2 * this.Z0 : this.Z0 / sqrt2;
             this.Ylt = 1 / this.Zlt;
 
@@ -117,12 +117,12 @@ namespace TLM.Core
         }
 
         public void Transmit(Node node, int k)
-        {            
+        {
             node.Vi.P1[k] = node.j < shape[0] - 1 ? GetNode(node.i, node.j + 1).Vr.P3[k - 1] : this.boundaries.Right * node.Vr.P1[k - 1];
             node.Vi.P2[k] = node.i > 0 ? GetNode(node.i - 1, node.j).Vr.P4[k - 1] : this.boundaries.Top * node.Vr.P2[k - 1];
             node.Vi.P3[k] = node.j > 0 ? GetNode(node.i, node.j - 1).Vr.P1[k - 1] : this.boundaries.Left * node.Vr.P3[k - 1];
             node.Vi.P4[k] = node.i < shape[1] - 1 ? GetNode(node.i + 1, node.j).Vr.P2[k - 1] : this.boundaries.Bottom * node.Vr.P4[k - 1];
-            node.Vi.P5[k] = node.Vr.P5[k - 1];                        
+            node.Vi.P5[k] = node.Vr.P5[k - 1];
         }
 
         public void Run()

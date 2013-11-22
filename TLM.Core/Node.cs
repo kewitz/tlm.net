@@ -169,6 +169,16 @@ namespace TLM.Core
             return Ex;
         }
 
+        public List<double> GetAllEZs()
+        {
+            int iteractions = this.Vi.P1.Count;
+            List<double> ezs = new List<double>();
+            
+            for (int k = 0; k < iteractions; k++)
+                ezs.Add(GetEz(k));
+
+            return ezs;
+        }
        
     }
 }

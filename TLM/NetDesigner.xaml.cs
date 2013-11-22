@@ -86,7 +86,7 @@ namespace TLM
         void graphicNode_MouseEnter(object sender, MouseEventArgs e)
         {
             Objects.Node s = (Objects.Node)sender;
-            string info = string.Format("{0}:{1}  -  Material: {2}", s.node.i, s.node.j, s.node.material.Name);
+            string info = string.Format("{0}:{1}  -  Material: {2}\nMax EZ: {3}", s.node.i, s.node.j, s.node.material.Name, s.node.GetAllEZs().Max());
             NodeInfo.Content = info;
             if (e.LeftButton == MouseButtonState.Pressed)
                 BrushEvent(s);

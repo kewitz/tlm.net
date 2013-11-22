@@ -32,7 +32,7 @@ namespace TLM
     {
         Thread solver;
         private Net net = new Net();
-        private ILPlotCube plot, plotHx, plotHy, plotHz, plotEx, plotEy;
+        private ILPlotCube plot, plotHx, plotHy, plotHz, plotEx, plotEy, tracker;
         private float maxVEz, maxVHx, maxVHy, maxVHz, maxVEx, maxVEy;
 
         public MainWindow()
@@ -49,23 +49,23 @@ namespace TLM
             DGMatList.RowEditEnding += DGMatList_RowEditEnding;
 
             var scene = new ILScene();
-            plot = new ILPlotCube(twoDMode: false);            
+            plot = new ILPlotCube(twoDMode: false);
             scene.Add(plot);
             var signal = ILMath.ones<float>(10, 10);
             ILSurface surf = new ILSurface(signal)
             {
                 Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
-                Colormap = Colormaps.Jet,                    
-    
+                Colormap = Colormaps.Jet,
+
             };
             plot.AllowPan = false;
-            plot.AllowZoom = false;                       
+            plot.AllowZoom = false;
             plot.Projection = Projection.Orthographic;
             plot.Position = new Vector3(1, 3, .5);
-            plot.AllowRotation = false;                
-            plot.Add(surf);            
+            plot.AllowRotation = false;
+            plot.Add(surf);
             scene.First<ILPlotCube>().AspectRatioMode = AspectRatioMode.MaintainRatios;
-            scene.First<ILPlotCube>().Rotation = Matrix4.Rotation(new Vector3(0.1, 0, 0), ILMath.pi / 2);                       
+            scene.First<ILPlotCube>().Rotation = Matrix4.Rotation(new Vector3(0.1, 0, 0), ILMath.pi / 2);
             ilPanel.Scene.Add(scene);
 
             ResultSeeker.ValueChanged += ResultSeeker_ValueChanged;
@@ -107,7 +107,7 @@ namespace TLM
             plotHy.AllowRotation = false;
             plotHy.Add(surfHy);
             sceneHy.First<ILPlotCube>().AspectRatioMode = AspectRatioMode.MaintainRatios;
-            sceneHy.First<ILPlotCube>().Rotation = Matrix4.Rotation(new Vector3(0.1, 0, 0), ILMath.pi / 2);            
+            sceneHy.First<ILPlotCube>().Rotation = Matrix4.Rotation(new Vector3(0.1, 0, 0), ILMath.pi / 2);
             ilPanelHy.Scene.Add(sceneHy);
 
             ResultSeekerHy.ValueChanged += ResultSeekerHy_ValueChanged;
@@ -177,9 +177,10 @@ namespace TLM
             ResultSeekerEy.ValueChanged += ResultSeekerEy_ValueChanged;
         }
 
+        #region Eventos
         void ResultSeeker_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            UpdatePlot(Convert.ToInt32(ResultSeeker.Value));            
+            UpdatePlot(Convert.ToInt32(ResultSeeker.Value));
         }
 
         void ResultSeekerHx_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -212,7 +213,7 @@ namespace TLM
             CBMat.ItemsSource = net.matList.Where(mat => mat.Name != "");
             Designer.MatList.ItemsSource = net.matList.Where(mat => mat.Name != "");
         }
-
+        #endregion
 
         public void CreateNet()
         {
@@ -225,7 +226,7 @@ namespace TLM
                 net.Z0 = Convert.ToDouble(TBZ0.Text, System.Globalization.CultureInfo.InvariantCulture);
                 net.f0 = Convert.ToDouble(TBFreq.Text, System.Globalization.CultureInfo.InvariantCulture);
                 net.c = Convert.ToDouble(TBC.Text, System.Globalization.CultureInfo.InvariantCulture);
-                net.N = Convert.ToInt32(TBN.Text, System.Globalization.CultureInfo.InvariantCulture)+1;
+                net.N = Convert.ToInt32(TBN.Text, System.Globalization.CultureInfo.InvariantCulture) + 1;
                 double bTop = Convert.ToDouble(TBBoundTop.Text, System.Globalization.CultureInfo.InvariantCulture);
                 double bLeft = Convert.ToDouble(TBBoundLeft.Text, System.Globalization.CultureInfo.InvariantCulture);
                 double bBot = Convert.ToDouble(TBBoundBot.Text, System.Globalization.CultureInfo.InvariantCulture);
@@ -239,6 +240,7 @@ namespace TLM
             {
             }
         }
+
         public void UpdateUI()
         {
             TBSizeX.Text = net.x.ToString();
@@ -270,7 +272,7 @@ namespace TLM
             solver.Start();
             solver.Join();
             StatusInfo.Text = "Simulation done.";
-            if (CBMode.SelectedIndex == 0)
+            if (this.net.mode == 0)
             {
                 TBIEz.IsEnabled = true;
                 TBIHx.IsEnabled = true;
@@ -280,7 +282,7 @@ namespace TLM
                 ResultSeekerHx.Maximum = net.N - 1;
                 ResultSeekerHx.Value = 0;
                 ResultSeekerHy.Maximum = net.N - 1;
-                ResultSeekerHy.Value = 0; 
+                ResultSeekerHy.Value = 0;
             }
             else
             {
@@ -292,11 +294,34 @@ namespace TLM
                 ResultSeekerEx.Maximum = net.N - 1;
                 ResultSeekerEx.Value = 0;
                 ResultSeekerEy.Maximum = net.N - 1;
-                ResultSeekerEy.Value = 0; 
+                ResultSeekerEy.Value = 0;
             }
-                    
+            UpdateTrackerPlot();
         }
 
+        #region Plotagens
+        private void UpdateTrackerPlot()
+        {
+            ilPanelTracker.Scene.Children.Clear();
+            var scene = new ILScene();
+            // add plot cube
+            tracker = scene.Add(new ILPlotCube());
+            // meterialize new colormap
+            ILColormap m = new ILColormap(Colormaps.Lines);
+            // some data to plot 
+            var datas = (from node in Designer.TrackingNodes
+                         select node.GetAllEZs().ToArray()).ToList();
+
+            //ILArray<float> data = ILMath.tosingle(ILMath.ones(1, 10));
+            //// create a line plot for each entry in the colormap
+            foreach (var data in datas)
+            {
+                ILArray<float> d = ILMath.tosingle((ILArray<double>)data);
+                d = d.Reshape(new int[] { 1, d.Count() });
+                tracker.Add(new ILLinePlot(d));
+            }
+            ilPanelTracker.Scene.Add(scene);
+        }
         private void UpdatePlot(int iteration)
         {
             var dvalues = (from node in net.Nodes
@@ -316,14 +341,13 @@ namespace TLM
             {
                 Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
                 Colormap = Colormaps.Jet,
-                
-            };            
+
+            };
             plot.Add(surf);
             plot.Limits.Set(new Vector3(0, 0, -maxVEz),
-                                new Vector3(net.shape[1], net.shape[0], maxVEz));             
+                                new Vector3(net.shape[1], net.shape[0], maxVEz));
             ilPanel.Refresh();
         }
-
         private void UpdatePlotHx(int iteration)
         {
             var dvalues = (from node in net.Nodes
@@ -343,13 +367,12 @@ namespace TLM
             {
                 Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
                 Colormap = Colormaps.Jet,
-            };            
+            };
             plotHx.Add(surf);
             plotHx.Limits.Set(new Vector3(0, 0, -maxVHx),
-                                new Vector3(net.shape[1], net.shape[0], maxVHx)); 
+                                new Vector3(net.shape[1], net.shape[0], maxVHx));
             ilPanelHx.Refresh();
         }
-
         private void UpdatePlotHy(int iteration)
         {
             var dvalues = (from node in net.Nodes
@@ -362,20 +385,19 @@ namespace TLM
             int T = Convert.ToInt32(Math.Floor(time));
             maxVHy = (maxVHy < Convert.ToSingle(Math.Round(dvalues.Max(), 2))) ? Convert.ToSingle(Math.Round(dvalues.Max(), 2)) :
                                                                                 maxVHy;
-            ResultSeekerHy.ToolTip = string.Format("Iteration(k):{0} - Period(T):{1} - Max. Value:{2}", iteration, T, maxVHy);            
+            ResultSeekerHy.ToolTip = string.Format("Iteration(k):{0} - Period(T):{1} - Max. Value:{2}", iteration, T, maxVHy);
             plotHy.Children.Clear();
             var signal = ILMath.ones<float>(10, 10);
             ILSurface surf = new ILSurface(values)
             {
                 Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
                 Colormap = Colormaps.Jet,
-            };                      
+            };
             plotHy.Add(surf);
             plotHy.Limits.Set(new Vector3(0, 0, -maxVHy),
-                                new Vector3(net.shape[1], net.shape[0], maxVHy)); 
+                                new Vector3(net.shape[1], net.shape[0], maxVHy));
             ilPanelHy.Refresh();
         }
-
         private void UpdatePlotHz(int iteration)
         {
             var dvalues = (from node in net.Nodes
@@ -402,7 +424,6 @@ namespace TLM
                                 new Vector3(net.shape[1], net.shape[0], maxVHz));
             ilPanelHz.Refresh();
         }
-
         private void UpdatePlotEx(int iteration)
         {
             var dvalues = (from node in net.Nodes
@@ -428,7 +449,6 @@ namespace TLM
                                 new Vector3(net.shape[1], net.shape[0], maxVEx));
             ilPanelEx.Refresh();
         }
-
         private void UpdatePlotEy(int iteration)
         {
             var dvalues = (from node in net.Nodes
@@ -454,6 +474,7 @@ namespace TLM
                                 new Vector3(net.shape[1], net.shape[0], maxVEy));
             ilPanelEy.Refresh();
         }
+        #endregion
 
         private void BTRecalcNet_Click_1(object sender, RoutedEventArgs e)
         {
@@ -491,6 +512,10 @@ namespace TLM
                     XmlSerializer serializer = new XmlSerializer(typeof(Net));
                     fs = new FileStream(OpenDialog.FileName, FileMode.Open);
                     this.net = (Net)serializer.Deserialize(fs);
+                    //Fix material bug.
+                    this.net.Nodes.ForEach(n => n.material = this.net.GetMaterial(n.material.Name));
+                    this.net.material = this.net.GetMaterial(this.net.material.Name);
+
                     Designer.WorkingNet = this.net;
                     UpdateUI();
                 }
