@@ -75,11 +75,9 @@ namespace TLM.Core
             this.Vi.P1[k] = this.Vi.P2[k] = this.Vi.P3[k] = this.Vi.P4[k] = vi;
         }
 
-        public void SetHz(int k, double Hz)
-        {
-            double iz = Hz * this.dL;
-            double vi = (iz * (4 * this.Zlt) + this.Zs + this.Rs) / 2;
-            this.Vi.P1[k] = this.Vi.P2[k] = this.Vi.P3[k] = this.Vi.P4[k] = this.Vi.P5[k] = vi;
+        public void SetHz(int k, double Vy)
+        {            
+            this.Vi.P1[k] = this.Vi.P3[k] = Vy/2;
         }
 
         public void SolveScatter(int k, int mode)
@@ -87,19 +85,19 @@ namespace TLM.Core
             //Scatter matrix.
             ILArray<double> s = (mode == 0) ? array<double>(
                                                     new double[] { 
-                                                        2-this.Y, 2, 2, 2, 2*this.Ys,
-                                                        2, 2-this.Y, 2, 2, 2*this.Ys,
-                                                        2, 2, 2-this.Y, 2, 2*this.Ys,
-                                                        2, 2, 2, 2-this.Y, 2*this.Ys,
-                                                        2, 2, 2, 2, 2*this.Ys-this.Y
+                                                        2-this.Y, 2, 2, 2, 2,
+                                                        2, 2-this.Y, 2, 2, 2,
+                                                        2, 2, 2-this.Y, 2, 2,
+                                                        2, 2, 2, 2-this.Y, 2,
+                                                        2*this.Ys, 2*this.Ys, 2*this.Ys, 2*this.Ys, 2*this.Ys-this.Y
                                                     }, 5, 5) : 
                                               array<double>(
                                                     new double[] { 
-                                                        this.Z-2,       2,          2,           -2,            -2,
-                                                        2,           this.Z-2,     -2,            2,             2,
-                                                        2,             -2,        this.Z-2,       2,             2,
-                                                        -2,             2,          2,          this.Z-2,       -2,
-                                                        -2 * this.Zs, 2 * this.Zs, 2 * this.Zs, -2 * this.Zs, this.Z - 2 * this.Zs
+                                                        this.Z-2, 2, 2, -2, -2 * this.Zs,
+                                                        2, this.Z-2, -2, 2, 2 * this.Zs,
+                                                        2, -2, this.Z-2, 2, 2 * this.Zs,
+                                                        -2, 2, 2, this.Z-2, -2 * this.Zs,
+                                                        -2, 2, 2, -2, this.Z - 2 * this.Zs
                                                     }, 5, 5);
             //Input Voltage array.
             ILArray<double> vi = array<double>(
@@ -169,6 +167,10 @@ namespace TLM.Core
             return Ex;
         }
 
-       
+        internal double CalcHz(double Ey)
+        {
+            double vy = -Ey * dL;
+            return vy;
+        }
     }
 }

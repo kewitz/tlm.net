@@ -55,8 +55,6 @@ namespace TLM
                 Colormap = Colormaps.Jet,                    
     
             };
-            plot.AllowPan = false;
-            plot.AllowZoom = false;                       
             plot.Projection = Projection.Orthographic;
             plot.Position = new Vector3(1, 3, .5);
             plot.AllowRotation = false;                
@@ -76,8 +74,6 @@ namespace TLM
                 Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
                 Colormap = Colormaps.Jet,
             };
-            plotHx.AllowPan = false;
-            plotHx.AllowZoom = false;
             plotHx.Projection = Projection.Orthographic;
             plotHx.Position = new Vector3(1, 3, .5);
             plotHx.AllowRotation = false;
@@ -97,8 +93,6 @@ namespace TLM
                 Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
                 Colormap = Colormaps.Jet,
             };
-            plotHy.AllowPan = false;
-            plotHy.AllowZoom = false;
             plotHy.Projection = Projection.Orthographic;
             plotHy.Position = new Vector3(1, 3, .5);
             plotHy.AllowRotation = false;
@@ -119,11 +113,9 @@ namespace TLM
                 Colormap = Colormaps.Jet,
 
             };
-            plotHz.AllowPan = false;
-            plotHz.AllowZoom = false;
             plotHz.Projection = Projection.Orthographic;
             plotHz.Position = new Vector3(1, 3, .5);
-            plotHz.AllowRotation = false;
+            //plotHz.AllowRotation = false;
             plotHz.Add(surfHz);
             sceneHz.First<ILPlotCube>().AspectRatioMode = AspectRatioMode.MaintainRatios;
             sceneHz.First<ILPlotCube>().Rotation = Matrix4.Rotation(new Vector3(0.1, 0, 0), ILMath.pi / 2);
@@ -140,11 +132,9 @@ namespace TLM
                 Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
                 Colormap = Colormaps.Jet,
             };
-            plotEx.AllowPan = false;
-            plotEx.AllowZoom = false;
             plotEx.Projection = Projection.Orthographic;
             plotEx.Position = new Vector3(1, 3, .5);
-            plotEx.AllowRotation = false;
+            //plotEx.AllowRotation = false;
             plotEx.Add(surfEx);
             sceneEx.First<ILPlotCube>().AspectRatioMode = AspectRatioMode.MaintainRatios;
             sceneEx.First<ILPlotCube>().Rotation = Matrix4.Rotation(new Vector3(0.1, 0, 0), ILMath.pi / 2);
@@ -160,12 +150,10 @@ namespace TLM
             {
                 Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
                 Colormap = Colormaps.Jet,
-            };
-            plotEy.AllowPan = false;
-            plotEy.AllowZoom = false;
+            };            
             plotEy.Projection = Projection.Orthographic;
             plotEy.Position = new Vector3(1, 3, .5);
-            plotEy.AllowRotation = false;
+            //plotEy.AllowRotation = false;
             plotEy.Add(surfEy);
             sceneHy.First<ILPlotCube>().AspectRatioMode = AspectRatioMode.MaintainRatios;
             sceneHy.First<ILPlotCube>().Rotation = Matrix4.Rotation(new Vector3(0.1, 0, 0), ILMath.pi / 2);
@@ -372,8 +360,8 @@ namespace TLM
 
             };
             plotHz.Add(surf);
-            plotHz.Limits.Set(new Vector3(0, 0, -maxVHz),
-                                new Vector3(net.shape[1], net.shape[0], maxVHz));
+            //plotHz.Limits.Set(new Vector3(0, 0, -maxVHz),
+            //                    new Vector3(net.shape[1], net.shape[0], maxVHz));
             ilPanelHz.Refresh();
         }
 
@@ -398,8 +386,8 @@ namespace TLM
                 Colormap = Colormaps.Jet,
             };
             plotEx.Add(surf);
-            plotEx.Limits.Set(new Vector3(0, 0, -maxVEx),
-                                new Vector3(net.shape[1], net.shape[0], maxVEx));
+            //plotEx.Limits.Set(new Vector3(0, 0, -maxVEx),
+            //                    new Vector3(net.shape[1], net.shape[0], maxVEx));
             ilPanelEx.Refresh();
         }
 
@@ -424,8 +412,8 @@ namespace TLM
                 Colormap = Colormaps.Jet,
             };
             plotEy.Add(surf);
-            plotEy.Limits.Set(new Vector3(0, 0, -maxVEy),
-                                new Vector3(net.shape[1], net.shape[0], maxVEy));
+            //plotEy.Limits.Set(new Vector3(0, 0, -maxVEy),
+            //                    new Vector3(net.shape[1], net.shape[0], maxVEy));
             ilPanelEy.Refresh();
         }
 
@@ -434,6 +422,32 @@ namespace TLM
             CreateNet();
             Designer.WorkingNet = this.net;
             Designer.DrawNet();
+        }
+
+        private void CBMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CBMode.SelectedIndex == 0)
+            {
+                TBSizeX.Text = "10E-2";
+                TBSizeY.Text = "2E-2";
+                TBdL.Text = "1E-3";
+                TBBoundTop.Text = "1";
+                TBBoundLeft.Text = "0";
+                TBBoundBot.Text = "1";
+                TBBoundRight.Text = "0";
+                TBFk.Text = "Sin(2*[Pi]*[f0]*([k]+1)*[dT])*100";
+            }
+            else
+            {
+                TBSizeX.Text = "19.05E-3";
+                TBSizeY.Text = "9.525E-3";
+                TBdL.Text = "0.381E-3";
+                TBBoundTop.Text = "-1";
+                TBBoundLeft.Text = "-1";
+                TBBoundBot.Text = "-1";
+                TBBoundRight.Text = "-1";
+                TBFk.Text = "Exp(-18*(Pow(((((([k]+1)*[dT])-(10*[dT])))/(10*[dT])),2)))";
+            }
         }
     }
 }
