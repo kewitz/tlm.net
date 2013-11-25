@@ -155,7 +155,7 @@ namespace TLM
             {
                 Wireframe = { Color = System.Drawing.Color.FromArgb(50, 60, 60, 60) },
                 Colormap = Colormaps.Jet,
-            };            
+            };
             plotEy.Projection = Projection.Orthographic;
             plotEy.Position = new Vector3(1, 3, .5);
             //plotEy.AllowRotation = false;
@@ -517,8 +517,10 @@ namespace TLM
                 {
                     fs.Close();
                 }
-       
-                private void CBMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+            }
+        }
+        
+        private void CBMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CBMode.SelectedIndex == 0)
             {
