@@ -99,6 +99,7 @@ namespace TLM.Core
                                                         -2, 2, 2, this.Z-2, -2 * this.Zs,
                                                         -2, 2, 2, -2, this.Z - 2 * this.Zs
                                                     }, 5, 5);
+            
             //Input Voltage array.
             ILArray<double> vi = array<double>(
                     new double[] { 

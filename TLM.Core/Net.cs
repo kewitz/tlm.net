@@ -146,8 +146,11 @@ namespace TLM.Core
                     Parallel.ForEach(inputNodes, n => n.SetEz(k, value));
                 }
                 else 
-                {                    
-                    Parallel.ForEach(inputNodes, n => n.SetHz(k, n.CalcHz(value)));
+                {
+                    if (value != 0.0)
+                    {
+                        Parallel.ForEach(inputNodes, n => n.SetHz(k, n.CalcHz(value)));
+                    }
                 }
 
                 //Solve Scatter
