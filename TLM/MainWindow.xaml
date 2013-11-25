@@ -26,7 +26,7 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel x:Name="ParamPanel" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" >
                         <Label Content="Irrad. Mode:"/>
-                        <ComboBox x:Name="CBMode" SelectedIndex="0" Margin="20,0"/>
+                        <ComboBox x:Name="CBMode" SelectedIndex="0" Margin="20,0" SelectionChanged="CBMode_SelectionChanged"/>
                         <Label Content="Size X:"/>
                         <TextBox x:Name="TBSizeX" Margin="20,0" Text="10E-2" />
                         <Label Content="Size Y:"/>
