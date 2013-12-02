@@ -42,6 +42,8 @@ namespace TLM
             CBMat.ItemsSource = net.matList.Where(mat => mat.Name != "");
             Designer.MatList.ItemsSource = net.matList.Where(mat => mat.Name != "");
 
+            Designer.TrackNode += Designer_TrackNode;
+
             CBMode.Items.Add("Paralelo");
             CBMode.Items.Add("Série");
 
@@ -165,6 +167,11 @@ namespace TLM
             ilPanelEy.Scene.Add(sceneEy);
 
             ResultSeekerEy.ValueChanged += ResultSeekerEy_ValueChanged;
+        }
+
+        void Designer_TrackNode(object sender, EventArgs e)
+        {
+            UpdateTrackerPlot();
         }
 
         #region Eventos
