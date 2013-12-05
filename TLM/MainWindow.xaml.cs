@@ -305,18 +305,24 @@ namespace TLM
             tracker = scene.Add(new ILPlotCube());
             // meterialize new colormap
             ILColormap m = new ILColormap(Colormaps.Lines);
-            // some data to plot 
-            var datas = (from node in Designer.TrackingNodes
-                         select node.GetAllEZs().ToArray()).ToList();
-
-            //ILArray<float> data = ILMath.tosingle(ILMath.ones(1, 10));
             //// create a line plot for each entry in the colormap
-            foreach (var data in datas)
+            var legendas = tracker.Add(
+                new ILLegend
+                {
+                    Location = new PointF(1, 0.02f),
+                    Anchor = new PointF(1, 0)
+            });
+            //foreach (var data in datas)
+            foreach (var node in Designer.TrackingNodes)
             {
+                double[] data = node.GetAllEZs().ToArray();
                 ILArray<float> d = ILMath.tosingle((ILArray<double>)data);
                 d = d.Reshape(new int[] { 1, d.Count() });
-                tracker.Add(new ILLinePlot(d));
+                var lp = tracker.Add(new ILLinePlot(d));
+                legendas.Items.Add(new ILLegendItem(lp, String.Format("Node: {0}:{1}", node.i, node.j)));
+                //legendas.Add();
             }
+
             ilPanelTracker.Scene.Add(scene);
         }
         private void UpdatePlot(int iteration)
@@ -526,7 +532,7 @@ namespace TLM
                 }
             }
         }
-        
+
         private void CBMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CBMode.SelectedIndex == 0)

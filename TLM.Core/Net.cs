@@ -142,16 +142,10 @@ namespace TLM.Core
 
                 var value = (double)exc.Evaluate();
                 if (this.mode == 0)
-                {
                     Parallel.ForEach(inputNodes, n => n.SetEz(k, value));
-                }
                 else 
-                {
                     if (value != 0.0)
-                    {
                         Parallel.ForEach(inputNodes, n => n.SetHz(k, n.CalcHz(value)));
-                    }
-                }
 
                 //Solve Scatter
                 Parallel.ForEach(Nodes, n => n.SolveScatter(k, mode));
