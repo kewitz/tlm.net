@@ -8,6 +8,9 @@ using ILNumerics;
 
 namespace TLM.Core
 {
+    /// <summary>
+    /// Node element of the transmission line matrix.
+    /// </summary>
     [Serializable]
     public class Node : ILNumerics.ILMath
     {

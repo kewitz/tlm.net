@@ -24,6 +24,7 @@ namespace TLM
     {
         public Net WorkingNet { get; set; }
         public int Spacing = 10;
+        public event EventHandler TrackNode;
 
         public List<Node> TrackingNodes
         {
@@ -79,8 +80,15 @@ namespace TLM
             if (ToggleTrack.IsChecked == true)
             {
                 s.Tracking = !s.Tracking;
+                EvokeTrackNode(s.node);
             }
             s.Redraw();
+        }
+
+        void EvokeTrackNode(Node n)
+        {
+            if (TrackNode != null)
+                this.TrackNode(n, null);
         }
 
         void graphicNode_MouseEnter(object sender, MouseEventArgs e)

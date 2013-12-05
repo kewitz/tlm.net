@@ -42,6 +42,8 @@ namespace TLM
             CBMat.ItemsSource = net.matList.Where(mat => mat.Name != "");
             Designer.MatList.ItemsSource = net.matList.Where(mat => mat.Name != "");
 
+            Designer.TrackNode += Designer_TrackNode;
+
             CBMode.Items.Add("Paralelo");
             CBMode.Items.Add("Série");
 
@@ -165,6 +167,11 @@ namespace TLM
             ilPanelEy.Scene.Add(sceneEy);
 
             ResultSeekerEy.ValueChanged += ResultSeekerEy_ValueChanged;
+        }
+
+        void Designer_TrackNode(object sender, EventArgs e)
+        {
+            UpdateTrackerPlot();
         }
 
         #region Eventos
@@ -298,6 +305,7 @@ namespace TLM
             tracker = scene.Add(new ILPlotCube());
             // meterialize new colormap
             ILColormap m = new ILColormap(Colormaps.Lines);
+<<<<<<< HEAD
             // some data to plot 
             var datas = (this.net.mode == 0) ?
                 (from node in Designer.TrackingNodes select node.GetAllEZs().ToArray()).ToList() :
@@ -306,12 +314,31 @@ namespace TLM
             //// create a line plot for each entry in the colormap
             
             foreach (var data in datas)
+=======
+            //// create a line plot for each entry in the colormap
+            var legendas = tracker.Add(
+                new ILLegend
+                {
+                    Location = new PointF(1, 0.02f),
+                    Anchor = new PointF(1, 0)
+            });
+            //foreach (var data in datas)
+            foreach (var node in Designer.TrackingNodes)
+>>>>>>> origin/master
             {
+                double[] data = node.GetAllEZs().ToArray();
                 ILArray<float> d = ILMath.tosingle((ILArray<double>)data);
                 d = d.Reshape(new int[] { 1, d.Count() });
+<<<<<<< HEAD
                 tracker.Add(new ILLinePlot(d));
                 //tracker.Add(new ILLinePlot(ILMath.abs(ILMath.fft(d))));
+=======
+                var lp = tracker.Add(new ILLinePlot(d));
+                legendas.Items.Add(new ILLegendItem(lp, String.Format("Node: {0}:{1}", node.i, node.j)));
+                //legendas.Add();
+>>>>>>> origin/master
             }
+
             ilPanelTracker.Scene.Add(scene);
         }
         private void UpdatePlot(int iteration)
@@ -521,7 +548,7 @@ namespace TLM
                 }
             }
         }
-        
+
         private void CBMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CBMode.SelectedIndex == 0)
