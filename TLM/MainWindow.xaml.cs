@@ -299,16 +299,18 @@ namespace TLM
             // meterialize new colormap
             ILColormap m = new ILColormap(Colormaps.Lines);
             // some data to plot 
-            var datas = (from node in Designer.TrackingNodes
-                         select node.GetAllEZs().ToArray()).ToList();
-
-            //ILArray<float> data = ILMath.tosingle(ILMath.ones(1, 10));
+            var datas = (this.net.mode == 0) ?
+                (from node in Designer.TrackingNodes select node.GetAllEZs().ToArray()).ToList() :
+                (from node in Designer.TrackingNodes select node.GetAllHZs().ToArray()).ToList();
+            
             //// create a line plot for each entry in the colormap
+            
             foreach (var data in datas)
             {
                 ILArray<float> d = ILMath.tosingle((ILArray<double>)data);
                 d = d.Reshape(new int[] { 1, d.Count() });
                 tracker.Add(new ILLinePlot(d));
+                //tracker.Add(new ILLinePlot(ILMath.abs(ILMath.fft(d))));
             }
             ilPanelTracker.Scene.Add(scene);
         }

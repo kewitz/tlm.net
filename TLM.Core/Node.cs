@@ -178,6 +178,17 @@ namespace TLM.Core
 
             return ezs;
         }
+
+        public List<double> GetAllHZs()
+        {
+            int iteractions = this.Vi.P1.Count;
+            List<double> hzs = new List<double>();
+
+            for (int k = 0; k < iteractions; k++)
+                hzs.Add(GetHz(k));
+
+            return hzs;
+        }
        
         internal double CalcHz(double Ey)
         {
